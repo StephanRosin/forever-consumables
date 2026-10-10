@@ -171,4 +171,35 @@ S.Set("arrowMode", "RIGHT")
 
 M.check("holder does not save position", Bar.holder._dontSave, true)
 
+-- Login timing: delayed rescans, one SPELLS_CHANGED rescan, /fcon debug.
+M.flush()
+M.Fire("PLAYER_LOGIN")
+local d = {}
+for _, x in ipairs(M.delays) do d[x] = (d[x] or 0) + 1 end
+M.check("login: rescan after 1 s", d[1], 1)
+M.check("login: rescan after 5 s", d[5], 1)
+M.flush()
+M.Fire("PLAYER_ENTERING_WORLD")
+d = {}
+for _, x in ipairs(M.delays) do d[x] = (d[x] or 0) + 1 end
+M.check("entering world: rescan after 1 s", d[1], 1)
+M.check("entering world: rescan after 5 s", d[5], 1)
+M.flush()
+M.bags[8766] = 0
+M.Fire("SPELLS_CHANGED")
+M.check("SPELLS_CHANGED rescans", shown("drink"), false)
+M.bags[8766] = 5
+M.Fire("SPELLS_CHANGED")
+M.check("SPELLS_CHANGED only once", shown("drink"), false)
+M.Fire("BAG_UPDATE_DELAYED")
+S.Set("show_drink", true)
+S.Set("show_flasks", false)
+local line = Bar.DebugLine()
+M.check("debug line short", #line < 200, true)
+M.check("debug line format", line:match("^FC holder=%a+ alpha=%S+ bar=%a+ items=%d+ collapsed=%a+ driver=.+ food=%d") ~= nil, true)
+M.check("debug line counts", line:match("food=1 drink=1 healing=1") ~= nil, true)
+M.check("debug skips disabled", line:find("flasks=", 1, true), nil)
+SlashCmdList.FOREVERCONSUMABLES("debug")
+M.check("debug prints", M.chat[#M.chat]:find("FC holder=", 1, true) ~= nil, true)
+
 M.done()

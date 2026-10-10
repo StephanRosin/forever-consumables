@@ -49,6 +49,25 @@ M.check("plain food is not buff food", C.IsBuffFood(4599), false)
 M.check("conjured listed", C.IsConjured(5350), true)
 M.check("not conjured", C.IsConjured(8766), false)
 
+-- Spell names missing early after login: nothing is kept until all resolve.
+do
+    local full = M.spells
+    M.spells = { [433] = "Food", [430] = "Drink" }   -- the rest still nil
+    C.Reset()
+    M.items[90020] = { name = "Early Mana Potion", subclassID = 1, spell = "Restore Mana" }
+    M.items[90021] = { name = "Early Drink", subclassID = 5, spell = "Drink" }
+    M.check("early: mana potion via subclass", of(90020), "potions")
+    M.check("early: drink by spell", of(90021), "drink")
+    M.spells = { [433] = "Food", [430] = "Drink", [167152] = "Refreshment", [441] = "Healing Potion",
+        [437] = "Restore Mana", [746] = "First Aid" }   -- no Well Fed yet
+    M.check("incomplete names: still not final", of(90020), "mana")
+    M.spells = full
+    M.check("complete names: correct", of(90020), "mana")
+    M.spells = { [433] = "Gone" }                       -- names are kept once complete
+    M.check("complete names kept", of(90020), "mana")
+    M.spells = full
+end
+
 -- Every category key used in the lists is a real category.
 local known = {}
 for _, cat in ipairs(ns.Settings.CATEGORIES) do known[cat] = true end

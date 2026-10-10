@@ -201,7 +201,8 @@ end
 function Bar.ApplyVisibility()
     if not Bar.holder then return end
     ns.AfterCombat("visibility", function()
-        RegisterStateDriver(Bar.holder, "visibility", ns.Visibility.Driver(S.Get, ns.Visibility.Env()))
+        Bar.driver = ns.Visibility.Driver(S.Get, ns.Visibility.Env())
+        RegisterStateDriver(Bar.holder, "visibility", Bar.driver)
     end)
 end
 
@@ -318,12 +319,27 @@ function Bar.ButtonOf(cat) return buttons[cat] end
 
 -- Events ------------------------------------------------------------------------
 
+-- Spell names and item data can still be missing right after login or a
+-- loading screen: scan again a little later (Refresh defers itself in combat).
+local function rescanLater()
+    C_Timer.After(1, Bar.Refresh)
+    C_Timer.After(5, Bar.Refresh)
+end
+
 ns.On("PLAYER_LOGIN", function()
     ns.AfterCombat("create", function()
         Bar.Create()
         Bar.Refresh()
         Bar.ApplyVisibility()
     end)
+    rescanLater()
+end)
+ns.On("PLAYER_ENTERING_WORLD", rescanLater)
+local spellsSeen = false
+ns.On("SPELLS_CHANGED", function()
+    if spellsSeen then return end
+    spellsSeen = true
+    Bar.Refresh()
 end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
@@ -365,3 +381,22 @@ S.OnChange(function(key)
     if key ~= nil and ALPHA[key] then Bar.ApplyAlpha(); return end
     if key == nil or not VISIBILITY[key] then ns.AfterCombat("refresh", Bar.Refresh) end
 end)
+
+-- /fcon debug: one line, for bug reports on a bar that is not showing.
+function Bar.DebugLine()
+    local holder = Bar.holder
+    if not holder then return "FC no holder" end
+    local parts = { "FC", "holder=" .. (holder:IsShown() and "shown" or "hidden"),
+        "alpha=" .. tostring(holder:GetAlpha()), "bar=" .. (Bar.bar:IsShown() and "shown" or "hidden") }
+    local items = 0
+    for _, b in pairs(buttons) do if b:IsShown() then items = items + 1 end end
+    parts[#parts + 1] = "items=" .. items
+    parts[#parts + 1] = "collapsed=" .. (collapsed() and "yes" or "no")
+    parts[#parts + 1] = "driver=" .. tostring(Bar.driver)
+    for _, cat in ipairs(S.CATEGORIES) do
+        if S.Get("show_" .. cat) then parts[#parts + 1] = cat .. "=" .. #(lastScan[cat] or {}) end
+    end
+    return table.concat(parts, " ")
+end
+
+ns.Slash.debug = function() ns.Print(Bar.DebugLine()) end

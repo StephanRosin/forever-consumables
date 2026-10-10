@@ -145,7 +145,7 @@ end
 
 function M.flush()
     local run = M.timers
-    M.timers = {}
+    M.timers, M.delays = {}, {}
     for _, fn in ipairs(run) do fn() end
 end
 
@@ -203,7 +203,8 @@ end
 function GetTime() return M.now or 1000 end
 NUM_BAG_SLOTS = 4
 
-C_Timer = { After = function(_, fn) table.insert(M.timers, fn) end }
+M.delays = {}
+C_Timer = { After = function(d, fn) table.insert(M.timers, fn); table.insert(M.delays, d) end }
 
 -- Items: M.items[id] = { name, icon, classID, subclassID, spell, spellID,
 -- minLevel, itemLevel, desc }; M.bags[id] = count, laid out bag 0 slot 1..n.

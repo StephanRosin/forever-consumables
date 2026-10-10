@@ -22,14 +22,19 @@ local SUBCLASS = { [1] = "potions", [2] = "elixirs", [3] = "flasks", [4] = "scro
 
 local names, cache = nil, {}
 
+-- The reference names, and whether all of them resolved. The client may
+-- not know some spells right after login; a table with holes is not kept,
+-- so the next call asks again.
 local function Names()
-    if not names then
-        names = {}
-        for key, id in pairs(Classify.SPELLS) do
-            names[key] = C_Spell and C_Spell.GetSpellName and C_Spell.GetSpellName(id) or nil
-        end
+    if names then return names, true end
+    local found, complete = {}, true
+    for key, id in pairs(Classify.SPELLS) do
+        local name = C_Spell and C_Spell.GetSpellName and C_Spell.GetSpellName(id) or nil
+        found[key] = name
+        if not name then complete = false end
     end
-    return names
+    if complete then names = found end
+    return found, complete
 end
 
 function Classify.Reset() names, cache = nil, {} end
@@ -50,15 +55,18 @@ local function compute(id)
     local _, _, _, _, _, classID, subclassID = C_Item.GetItemInfoInstant(id)
     if classID ~= 0 then return {}, classID ~= nil end
     local spell = C_Item.GetItemSpell(id)
+    local complete = true
     if spell then
-        local n = Names()
+        local n
+        n, complete = Names()
         for _, rule in ipairs(BY_SPELL) do
             if n[rule[1]] and spell == n[rule[1]] then return copy(rule[2]), true end
         end
     end
+    -- Without all reference names the subclass guess may be wrong: not final.
     local cat = SUBCLASS[subclassID]
-    if cat then return { cat }, true end
-    return {}, spell ~= nil
+    if cat then return { cat }, complete end
+    return {}, spell ~= nil and complete
 end
 
 -- Cached once the client knows the item well enough to decide.
