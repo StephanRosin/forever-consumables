@@ -101,6 +101,8 @@ local function newWidget(name, template)
         t._parent = self
         function t:SetTexture(f) self._texture = f end
         function t:GetTexture() return self._texture end
+        function t:SetAtlas(a) self._atlas = a end
+        function t:GetAtlas() return self._atlas end
         function t:SetColorTexture(r, g, b, a) self._color = { r, g, b, a } end
         function t:SetVertexColor(r, g, b, a) self._vertex = { r, g, b, a } end
         function t:SetDesaturated(v) self._desaturated = v and true or false end

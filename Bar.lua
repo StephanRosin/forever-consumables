@@ -25,7 +25,8 @@ Bar.ICONS = {
 }
 local TOGGLE_OPEN = "Interface\\Buttons\\UI-MinusButton-Up"
 local TOGGLE_CLOSED = "Interface\\Buttons\\UI-PlusButton-Up"
-local ARROW = "Interface\\ChatFrame\\ChatFrameExpandArrow"
+local ARROW_ATLAS = { RIGHT = "friendslist-categorybutton-arrow-right", BELOW = "friendslist-categorybutton-arrow-down" }
+local ARROW_ICON = 12
 
 local GREY = { 0.5, 0.5, 0.5, 1 }   -- count text at zero
 local buttons = {}      -- cat -> button
@@ -66,8 +67,8 @@ local function newButton(cat)
     b.count = b:CreateFontString(nil, "OVERLAY")
     b.arrow = CreateFrame("Button", nil, Bar.bar)
     b.arrow.icon = b.arrow:CreateTexture(nil, "ARTWORK")
-    b.arrow.icon:SetAllPoints(b.arrow)
-    b.arrow.icon:SetTexture(ARROW)
+    b.arrow.icon:SetSize(ARROW_ICON, ARROW_ICON)
+    b.arrow.icon:SetPoint("CENTER")
     b.arrow:SetScript("OnClick", function(self)
         if not InCombatLockdown() and Bar.onPick then Bar.onPick(self, cat) end
     end)
@@ -278,11 +279,11 @@ function Bar.Refresh()
         if g.arrow == "RIGHT" then
             b.arrow:SetSize(ns.Layout.ARROW, size)
             b.arrow:SetPoint("LEFT", b, "RIGHT", 0, 0)
-            b.arrow.icon:SetTexCoord(0, 1, 0, 1)
+            b.arrow.icon:SetAtlas(ARROW_ATLAS.RIGHT)
         elseif g.arrow == "BELOW" then
             b.arrow:SetSize(size, ns.Layout.ARROW)
             b.arrow:SetPoint("TOP", b, "BOTTOM", 0, 0)
-            b.arrow.icon:SetTexCoord(0, 1, 1, 1, 0, 0, 1, 0)
+            b.arrow.icon:SetAtlas(ARROW_ATLAS.BELOW)
         end
         b.arrow:SetShown(g.arrow ~= nil)
     end
