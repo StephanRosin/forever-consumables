@@ -100,8 +100,8 @@ Settings.Validate = validate
 function Settings.Get(key)
     local def = byKey[key]
     if not def then return nil end
-    local v = ns.DB()[key]
-    if v ~= nil and validate(def, v) ~= nil then return copy(v) end
+    local v = validate(def, ns.DB()[key])
+    if v ~= nil then return copy(v) end
     return copy(def.default)
 end
 
@@ -216,7 +216,7 @@ function Settings.Import(str)
         local key, raw = entry:match("^([%w_]+)=(.*)$")
         local def = key and byKey[key]
         local v = def and decode(def, raw)
-        v = v ~= nil and validate(def, v) or nil
+        if v ~= nil then v = validate(def, v) end
         if v ~= nil then values[key] = v end
     end
     local db = ns.DB()

@@ -35,6 +35,7 @@ M.check("cleaned order", table.concat(S.Order(), ","),
 S.Set("visMode", "COMBAT")
 S.Set("borderColor", { 1, 0, 0, 1 })
 S.Set("countFont", "Arial; Narrow=1")
+S.Set("show_food", false)
 local text = S.Export()
 M.check("export prefix", text:sub(1, 4), "FC1;")
 ns.SwitchProfile("Other")
@@ -44,6 +45,11 @@ M.check("import mode", S.Get("visMode"), "COMBAT")
 M.check("import colour", S.Get("borderColor")[1], 1)
 M.check("import text escaped", S.Get("countFont"), "Arial; Narrow=1")
 M.check("import order", S.Order()[1], "mana")
+M.check("import false survives", S.Get("show_food"), false)
+
+-- A hand-edited out-of-range value is clamped on read.
+ns.DB().size = 999
+M.check("get clamps stored value", S.Get("size"), 64)
 local ok, err = S.Import("garbage")
 M.check("bad import refused", ok, false)
 M.check("bad import reason", err, "IMPORT_FORMAT")
