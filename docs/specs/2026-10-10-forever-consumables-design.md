@@ -76,7 +76,9 @@ a left click uses it; everything about the bar is configurable, and it can alway
 7. **Visibility** — all configurable, driven by a state driver (works in combat):
    - Mode: always / in combat only / out of combat only / never (bar off).
    - Extra conditions, each switchable: only in instances (dungeon or raid), only in a group, hide while dead or a
-     ghost, hide in a vehicle or on a taxi.
+     ghost, hide on a taxi. Group and dead are macro conditions of the driver (`[nogroup]`, `[dead]`); instance and
+     taxi have none, so the driver is rebuilt from events (zone change, control lost/gained) — out of combat, as
+     nobody enters an instance or a taxi in combat. Classic content has no vehicles.
    - Opacity: one value in combat, one out of combat; optionally fade in on mouse over.
 8. **Layout options** (Options > Bar): orientation (horizontal/vertical), buttons per row, button size, spacing,
    scale, border (show, size, colour), background (show, colour), position x/y, anchor point, lock/unlock (unlocked:
