@@ -1279,7 +1279,7 @@ Not for a subagent: needs the running game. The controller does it.
 
 - [ ] **Step 1:** `./install "$HOME/Games/Battlenet/drive_c/Program Files (x86)/World of Warcraft/_classic_beta_/Interface/AddOns"`
 - [ ] **Step 2:** Ask the user to start WoW (never send the launcher's start command twice), log in with a character carrying consumables, type `/fcon ids`, wait 3 seconds, `/fcon scan`, then `/reload`. (No movement, no casting during automated steps.)
-- [ ] **Step 3:** Read `WTF/Account/*/<realm>/<char>/SavedVariables/ForeverConsumables.lua` under `_classic_beta_`. For every `ids[id] = false`: find the right ID (wowhead classic/`wowapi`, or the scan) or remove it from `Data/Items.lua`. Compare `scanSpells` with the expected English/German names. In `scan`, check: subclass values the client uses for potions/elixirs/flasks/food, items with empty `cats` that should have one, wrong categories. Fix `Data/Items.lua` / `Classify.lua` (keep tests in step, add a case per fix).
+- [ ] **Step 3:** Read the character's `ForeverConsumables.lua` SavedVariables file. For every `ids[id] = false`: find the right ID (wowhead classic/`wowapi`, or the scan) or remove it from `Data/Items.lua`. Compare `scanSpells` with the expected English/German names. In `scan`, check: subclass values the client uses for potions/elixirs/flasks/food, items with empty `cats` that should have one, wrong categories. Fix `Data/Items.lua` / `Classify.lua` (keep tests in step, add a case per fix).
 - [ ] **Step 4:** `tests/run`; commit `git commit -am "Item data checked in the client"`.
 
 ---
@@ -2657,10 +2657,10 @@ Not for a subagent.
 
 ---
 
-### Task 11: Documentation, release preparation, Vault
+### Task 11: Documentation, release preparation
 
 - [ ] **Step 1:** `README.md` (what it is, install, `/fcon`, categories, settings overview, tests) and `docs/curseforge/description.md` (English, like FSM's).
 - [ ] **Step 2:** `tools/release`: copy from FSM, `sed -i 's/ForeverSquareMinimap/ForeverConsumables/g; s/Forever Square Minimap/Forever Consumables/g'`. The CurseForge project ID goes into the TOC as `## X-Curse-Project-ID:` once the user has created the project (ask; do not create it). Do not upload without the user's go.
-- [ ] **Step 3:** Vault: `git -C /mnt/obsidian-vault pull --rebase`; create `10-Projekte/WoW-Addons/ForeverConsumables.md` (frontmatter like `ForeverSquareMinimap.md`: `aktualisiert: <today>`, `version: 1.0.0`; repo, structure, classification order, combat rules, collapse snippet, probe commands, pitfalls found in Tasks 4 and 10); add it to `10-Projekte/WoW-Addons/WoW-Addons.md`'s list; commit and push the vault.
-- [ ] **Step 4:** Memory: a `forever-consumables.md` pointer (repo, Vault page) and a line in `MEMORY.md`.
+- [ ] **Step 3:** Project documentation page (version, structure, pitfalls).
+- [ ] **Step 4:** Notes for future work sessions.
 - [ ] **Step 5:** `git push origin main`.

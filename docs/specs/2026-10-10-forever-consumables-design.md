@@ -8,7 +8,7 @@ a left click uses it; everything about the bar is configurable, and it can alway
 
 - WoW: Forever is a modern client (Interface 16001) with Classic content. Addons live in
   `_classic_beta_/Interface/AddOns`. Same toolchain as the other Forever addons (tests with Lua 5.1 mocks,
-  `tools/package`, `tools/release`, CurseForge, a Vault page).
+  `tools/package`, `tools/release`, CurseForge, project docs).
 - Using an item needs a secure action button (`type = "item"`). Its attributes, size, position and visibility can
   change only out of combat — except through secure handlers and state drivers (`RegisterStateDriver`,
   `SecureHandlerClickTemplate`), which run in combat.
