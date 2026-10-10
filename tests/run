@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Runs the tests with Lua 5.1, as in the game; each file in its own process.
+#   tests/run            all files
+#   tests/run classify   only tests/run_classify.lua
+set -e
+HERE="$(cd "$(dirname "$0")" && pwd)"
+cd "$HERE"
+ROOT="$(cd "$HERE/.." && pwd)"
+status=0
+for t in run_*.lua; do
+    if [ -n "${1:-}" ] && [ "$t" != "run_$1.lua" ]; then continue; fi
+    lua5.1 -e "ADDONDIR='$ROOT'" "$t" || status=1
+done
+exit $status

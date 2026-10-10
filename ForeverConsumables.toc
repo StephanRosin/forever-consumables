@@ -1,0 +1,22 @@
+## Interface: 16001
+## Title: Forever Consumables
+## Notes: A small bar for food, drink, potions, flasks, elixirs, scrolls and bandages.
+## Notes-deDE: Eine kleine Leiste für Essen, Trinken, Tränke, Fläschchen, Elixiere, Schriftrollen und Verbände.
+## Notes-esES: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos y vendas.
+## Notes-esMX: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos y vendas.
+## Notes-frFR: Une petite barre pour nourriture, boissons, potions, flacons, élixirs, parchemins et bandages.
+## Version: 1.0.0
+## IconTexture: Interface\Icons\INV_Potion_54
+## AddonCompartmentFunc: ForeverConsumables_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: ForeverConsumables_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: ForeverConsumables_OnAddonCompartmentLeave
+## SavedVariables: ForeverConsumablesProfiles
+## SavedVariablesPerCharacter: ForeverConsumablesChar
+
+Locales\enUS.lua
+Locales\deDE.lua
+Locales\esES.lua
+Locales\frFR.lua
+Locale.lua
+Core.lua
+Profiles.lua
