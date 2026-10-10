@@ -1279,7 +1279,7 @@ Not for a subagent: needs the running game. The controller does it.
 
 - [ ] **Step 1:** `./install "$HOME/Games/Battlenet/drive_c/Program Files (x86)/World of Warcraft/_classic_beta_/Interface/AddOns"`
 - [ ] **Step 2:** Ask the user to start WoW (never send the launcher's start command twice), log in with a character carrying consumables, type `/fcon ids`, wait 3 seconds, `/fcon scan`, then `/reload`. (No movement, no casting during automated steps.)
-- [ ] **Step 3:** Read the character's `ForeverConsumables.lua` SavedVariables file. For every `ids[id] = false`: find the right ID (wowhead classic/`wowapi`, or the scan) or remove it from `Data/Items.lua`. Compare `scanSpells` with the expected English/German names. In `scan`, check: subclass values the client uses for potions/elixirs/flasks/food, items with empty `cats` that should have one, wrong categories. Fix `Data/Items.lua` / `Classify.lua` (keep tests in step, add a case per fix).
+- [ ] **Step 3:** Read the character's `ForeverConsumables.lua` SavedVariables file. For every `ids[id] = false`: find the right ID (wowhead classic or the scan) or remove it from `Data/Items.lua`. Compare `scanSpells` with the expected English/German names. In `scan`, check: subclass values the client uses for potions/elixirs/flasks/food, items with empty `cats` that should have one, wrong categories. Fix `Data/Items.lua` / `Classify.lua` (keep tests in step, add a case per fix).
 - [ ] **Step 4:** `tests/run`; commit `git commit -am "Item data checked in the client"`.
 
 ---
