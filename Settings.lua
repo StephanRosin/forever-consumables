@@ -47,7 +47,7 @@ local DEFS = {
     { key = "countPoint", type = "enum", values = Settings.POINTS, default = "BOTTOMRIGHT" },
     { key = "countX", type = "int", min = -30, max = 30, default = -2 },
     { key = "countY", type = "int", min = -30, max = 30, default = 2 },
-    { key = "arrowMode", type = "enum", values = { "RIGHT", "BELOW", "RIGHTCLICK" }, default = "RIGHT" },
+    { key = "arrowMode", type = "enum", values = { "RIGHT", "BELOW", "RIGHTCLICK" }, default = "RIGHTCLICK" },
     { key = "tooltip", type = "bool", default = true },
     -- Categories
     { key = "hideEmpty", type = "bool", default = true },
@@ -157,6 +157,7 @@ end
 -- %, ; and = as %XX.
 
 local FORMAT = "FC1"
+local END_MARK = "end"   -- last entry: a cut-off string lacks it and is refused
 
 local function escape(s)
     return (s:gsub("[%%;=]", function(c) return ("%%%02X"):format(c:byte()) end))
@@ -201,7 +202,15 @@ function Settings.Export()
     end
     table.sort(parts)
     table.insert(parts, 1, FORMAT)
+    parts[#parts + 1] = END_MARK
     return table.concat(parts, ";")
+end
+
+-- The active profile back to the defaults.
+function Settings.Reset()
+    local db = ns.DB()
+    for k in pairs(db) do db[k] = nil end
+    Settings.Changed(nil)
 end
 
 -- Replaces the active profile's values with the string's. Unknown keys
@@ -210,7 +219,11 @@ end
 function Settings.Import(str)
     if type(str) ~= "string" then return false, "IMPORT_FORMAT" end
     str = str:gsub("^%s+", ""):gsub("%s+$", "")
-    if str:sub(1, #FORMAT + 1) ~= FORMAT .. ";" and str ~= FORMAT then return false, "IMPORT_FORMAT" end
+    if str ~= FORMAT then
+        if str:sub(1, #FORMAT + 1) ~= FORMAT .. ";" or str:sub(-(#END_MARK + 1)) ~= ";" .. END_MARK then
+            return false, "IMPORT_FORMAT"
+        end
+    end
     local values = {}
     for entry in str:sub(#FORMAT + 2):gmatch("[^;]+") do
         local key, raw = entry:match("^([%w_]+)=(.*)$")

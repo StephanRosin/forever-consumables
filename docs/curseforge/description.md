@@ -1,6 +1,6 @@
 **Summary**
 
-A small, movable bar for your consumables: food, drink, healing and mana potions, combat potions, flasks, elixirs, protection potions, scrolls and bandages. Pick the item per category from a little arrow, click to use it, collapse the bar with one click, even in combat.
+A small, movable bar for your consumables: food, drink, healing and mana potions, combat potions, flasks, elixirs, protection potions, scrolls and bandages. Pick the item per category with a right click, click to use it, collapse the bar with one click, even in combat.
 
 ---
 
@@ -15,10 +15,10 @@ A consumables bar for **WoW: Forever**. One button per category shows the item i
 - **Empty categories are hidden**, so the bar only ever shows what you can actually use. Or keep them, greyed, if you prefer a fixed layout.
 
 ## Choose the item
-- The **small arrow** beside a button lists every item of that category in your bags, with its count. Pick one, and the button uses it from now on.
+- A **right click** on a button lists every item of that category in your bags, with its count. Pick one, and the button uses it from now on.
 - Or leave it on **"Automatic (best)"**: the best item you can use at your level is taken: conjured food, water, mana gems and healthstones first (they vanish otherwise), then the highest level. Buff food is never eaten automatically, only when you choose it.
 - Run out of your chosen item and the button falls back to the best one; restock and your choice is back.
-- Prefer a **right click** to open the list instead of the arrow? One setting.
+- Prefer a **small arrow** beside or below each button to open the list? One setting.
 
 ## What counts as what
 - Healing potions, healthstones, Whipper Root Tuber, Major Rejuvenation Potion.

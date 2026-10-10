@@ -95,4 +95,33 @@ end
 general.x.set(77)
 M.check("x via general tab", S.Get("x"), 77)
 
+
+-- Reset button clears the active profile and refreshes the window.
+local resetBtn
+for _, opt in ipairs(spec) do
+    if opt.buttons then for _, b in ipairs(opt.buttons) do if b.label == "OPT_PROFILE_RESET" then resetBtn = b end end end
+end
+M.check("reset button exists", resetBtn ~= nil, true)
+S.Set("size", 55)
+resetBtn.onClick()
+M.check("reset button restores default", S.Get("size"), 36)
+
+-- Dragging (x/y changes) refreshes an open window.
+local refreshed = 0
+local realRefresh = ns.RefreshOptions
+ns.RefreshOptions = function() refreshed = refreshed + 1 end
+ns.Window.Open()
+S.Set("x", 12)
+M.check("x change refreshes open window", refreshed, 1)
+S.Set("size", 30)
+M.check("other key does not", refreshed, 1)
+ns.Window.Toggle()
+S.Set("y", 13)
+M.check("closed window not refreshed", refreshed, 1)
+ns.RefreshOptions = realRefresh
+
+-- Export/import popups lift the shared edit box's letter limit.
+M.check("export maxLetters", StaticPopupDialogs.FOREVERCONSUMABLES_EXPORT.maxLetters, 0)
+M.check("import maxLetters", StaticPopupDialogs.FOREVERCONSUMABLES_IMPORT.maxLetters, 0)
+
 M.done()

@@ -106,4 +106,61 @@ M.check("mover shown", Bar.mover:IsShown(), true)
 S.Set("locked", true)
 M.check("mover hidden", Bar.mover:IsShown(), false)
 
+
+-- Combat start: between REGEN_DISABLED and the lockdown the combat state holds.
+S.Set("alphaCombat", 100); S.Set("alphaNoCombat", 50)
+M.Fire("PLAYER_REGEN_DISABLED")
+M.Fire("BAG_UPDATE_COOLDOWN")
+M.check("combat alpha before lockdown", Bar.holder:GetAlpha(), 1)
+M.check("arrow greyed before lockdown", heal.arrow.icon:IsDesaturated(), true)
+M.combat = true
+M.setCombat(false)
+M.check("alpha back after combat", Bar.holder:GetAlpha(), 0.5)
+
+-- Count text: grey at zero, configured colour otherwise.
+S.Set("countColor", { 1, 0, 0, 1 })
+M.check("count colour", heal.count._textColor[1], 1)
+M.check("count colour g", heal.count._textColor[2], 0)
+M.setCombat(true)
+M.bags[929] = 0
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("count grey at zero", heal.count._textColor[2], 0.5)
+M.bags[929] = 2
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("count colour restored", heal.count._textColor[2], 0)
+M.setCombat(false)
+
+-- Minimap keys do not refresh the bar.
+local scans, realScan = 0, ns.Bags.Scan
+ns.Bags.Scan = function() scans = scans + 1; return realScan() end
+S.Set("minimapAngle", 100); S.Set("minimapShow", false)
+M.check("minimap keys skip refresh", scans, 0)
+S.Set("size", 42)
+M.check("other keys refresh", scans, 1)
+ns.Bags.Scan = realScan
+
+-- Late item data: one throttled refresh for many events.
+scans = 0
+ns.Bags.Scan = function() scans = scans + 1; return realScan() end
+M.flush()
+M.Fire("GET_ITEM_INFO_RECEIVED", 1); M.Fire("GET_ITEM_INFO_RECEIVED", 2)
+M.check("no refresh before timer", scans, 0)
+M.flush()
+M.check("one throttled refresh", scans, 1)
+M.Fire("GET_ITEM_INFO_RECEIVED", 3); M.flush()
+M.check("next event refreshes again", scans, 2)
+ns.Bags.Scan = realScan
+
+-- Default arrow mode: right click, no arrow.
+M.check("arrowMode default", S.Def("arrowMode").default, "RIGHTCLICK")
+ns.DB().arrowMode = nil
+M.check("fresh arrowMode", S.Get("arrowMode"), "RIGHTCLICK")
+S.Set("size", 36)
+M.check("default: *type2 empty", heal:GetAttribute("*type2"), "")
+M.check("default: no arrow", heal.arrow:IsShown(), false)
+S.Set("arrowMode", "RIGHT")
+M.check("RIGHT mode shows arrow", heal.arrow:IsShown(), true)
+
+M.check("holder does not save position", Bar.holder._dontSave, true)
+
 M.done()

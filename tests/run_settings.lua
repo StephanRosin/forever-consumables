@@ -54,7 +54,33 @@ local ok, err = S.Import("garbage")
 M.check("bad import refused", ok, false)
 M.check("bad import reason", err, "IMPORT_FORMAT")
 M.check("bad import keeps profile", S.Get("visMode"), "COMBAT")
-M.check("unknown keys skipped", (S.Import("FC1;nosuch=1;size=50")), true)
+M.check("unknown keys skipped", (S.Import("FC1;nosuch=1;size=50;end")), true)
 M.check("known key after unknown", S.Get("size"), 50)
+
+
+-- Truncated export: refused, profile unchanged. Full string round-trips.
+local full = S.Export()
+M.check("export ends with marker", full:sub(-4), ";end")
+S.Set("size", 40)
+full = S.Export()
+S.Set("size", 44)
+for _, cut in ipairs({ full:sub(1, #full - 4), full:sub(1, 12), full:sub(1, #full - 1) }) do
+    local ok2, err2 = S.Import(cut)
+    M.check("truncated refused", ok2, false)
+    M.check("truncated reason", err2, "IMPORT_FORMAT")
+    M.check("truncated keeps profile", S.Get("size"), 44)
+end
+M.check("full string imports", (S.Import(full)), true)
+M.check("full string value", S.Get("size"), 40)
+M.check("bare FC1 resets", (S.Import("FC1")), true)
+M.check("bare FC1 default", S.Get("size"), 36)
+
+-- Reset.
+S.Set("size", 44)
+local changed = "unset"
+S.OnChange(function(k) changed = k end)
+S.Reset()
+M.check("reset to default", S.Get("size"), 36)
+M.check("reset notifies all", changed, nil)
 
 M.done()

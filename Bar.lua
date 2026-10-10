@@ -27,9 +27,14 @@ local TOGGLE_OPEN = "Interface\\Buttons\\UI-MinusButton-Up"
 local TOGGLE_CLOSED = "Interface\\Buttons\\UI-PlusButton-Up"
 local ARROW = "Interface\\ChatFrame\\ChatFrameExpandArrow"
 
+local GREY = { 0.5, 0.5, 0.5, 1 }   -- count text at zero
 local buttons = {}      -- cat -> button
 local lastScan = {}     -- cat -> entries
 local dirty = false
+-- In combat for display purposes. PLAYER_REGEN_DISABLED fires before
+-- InCombatLockdown() turns true, so alpha and arrows follow this flag;
+-- InCombatLockdown() alone decides whether protected calls are allowed.
+local inCombat = InCombatLockdown() and true or false
 
 local COLLAPSE = [[
     local bar = self:GetFrameRef("bar")
@@ -81,6 +86,7 @@ function Bar.Create()
     local holder = CreateFrame("Frame", "ForeverConsumablesHolder", UIParent, "SecureHandlerStateTemplate")
     holder:SetMovable(true)
     holder:SetClampedToScreen(true)
+    holder:SetDontSavePosition(true)   -- we place it ourselves from the saved x/y
     Bar.holder = holder
 
     local bar = CreateFrame("Frame", "ForeverConsumablesBar", holder, "SecureHandlerBaseTemplate")
@@ -198,11 +204,8 @@ function Bar.ApplyVisibility()
     end)
 end
 
--- inCombat: PLAYER_REGEN_DISABLED fires before the lockdown starts, so the
--- event handlers say it explicitly.
-function Bar.ApplyAlpha(inCombat)
+function Bar.ApplyAlpha()
     if not Bar.holder then return end
-    if inCombat == nil then inCombat = InCombatLockdown() end
     local over = Bar.holder:IsMouseOver()
     Bar.holder:SetAlpha(ns.Visibility.Alpha(S.Get, inCombat, over))
 end
@@ -210,9 +213,8 @@ end
 -- Icons, counts, cooldowns, greying, arrows: allowed in combat.
 -- The arrows are implicitly protected (anchored to the secure buttons): SetEnabled
 -- only when not locked down, i.e. at combat start (explicit inCombat) and after it.
-function Bar.UpdateDisplay(inCombat)
+function Bar.UpdateDisplay()
     local combat = inCombat
-    if combat == nil then combat = InCombatLockdown() end
     local locked = InCombatLockdown()
     for cat, b in pairs(buttons) do
         if b:IsShown() then
@@ -222,6 +224,8 @@ function Bar.UpdateDisplay(inCombat)
                 b.icon:SetTexture(e.icon)
                 b.icon:SetDesaturated(count == 0)
                 b.count:SetText(tostring(count))
+                local c = count == 0 and GREY or S.Get("countColor")
+                b.count:SetTextColor(c[1], c[2], c[3], c[4])
                 local start, duration = C_Container.GetItemCooldown(e.id)
                 if duration and duration > 0 then b.cooldown:SetCooldown(start, duration) else b.cooldown:Clear() end
             else
@@ -240,7 +244,7 @@ function Bar.Refresh()
     if not Bar.holder then return end
     if InCombatLockdown() then
         dirty = true
-        Bar.UpdateDisplay(true)
+        Bar.UpdateDisplay()
         return
     end
     dirty = false
@@ -324,12 +328,25 @@ ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
 ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
 ns.On("PLAYER_REGEN_DISABLED", function()
-    Bar.UpdateDisplay(true)
-    Bar.ApplyAlpha(true)
+    inCombat = true
+    Bar.UpdateDisplay()
+    Bar.ApplyAlpha()
 end)
 ns.On("PLAYER_REGEN_ENABLED", function()
-    if dirty then Bar.Refresh() else Bar.UpdateDisplay(false) end
-    Bar.ApplyAlpha(false)
+    inCombat = false
+    if dirty then Bar.Refresh() else Bar.UpdateDisplay() end
+    Bar.ApplyAlpha()
+end)
+-- Item data that was not cached at login arrives later: rescan, at most
+-- one pending rescan at a time.
+local infoPending = false
+ns.On("GET_ITEM_INFO_RECEIVED", function()
+    if infoPending then return end
+    infoPending = true
+    C_Timer.After(0.5, function()
+        infoPending = false
+        Bar.Refresh()
+    end)
 end)
 -- Instance and taxi: the driver is rebuilt a moment after they change.
 local function later() C_Timer.After(0.2, Bar.ApplyVisibility) end
@@ -339,9 +356,10 @@ for _, event in ipairs({ "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA", "PLAY
 end
 
 local VISIBILITY = { visMode = true, visInstance = true, visGroup = true, visHideDead = true, visHideTaxi = true }
+local MINIMAP = { minimapShow = true, minimapAngle = true }
 local ALPHA = { alphaCombat = true, alphaNoCombat = true, fadeMouseover = true }
 S.OnChange(function(key)
-    if not Bar.holder then return end
+    if not Bar.holder or MINIMAP[key] then return end
     if key == nil or VISIBILITY[key] then Bar.ApplyVisibility() end
     if key ~= nil and ALPHA[key] then Bar.ApplyAlpha(); return end
     if key == nil or not VISIBILITY[key] then ns.AfterCombat("refresh", Bar.Refresh) end

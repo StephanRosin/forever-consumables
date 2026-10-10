@@ -52,6 +52,7 @@ local function generalTab()
         { type = "buttons", buttons = {
             { label = "OPT_PROFILE_SAVE_AS", width = 150, onClick = function() ns.AskProfileName() end },
             { label = "OPT_PROFILE_DELETE", width = 100, onClick = function() ns.AskDeleteProfile() end },
+            { label = "OPT_PROFILE_RESET", width = 110, onClick = function() S.Reset(); ns.RefreshOptions() end },
         } },
         { type = "buttons", buttons = {
             { label = "OPT_EXPORT", width = 120, onClick = function() ns.ShowExport() end },
@@ -150,6 +151,12 @@ function ns.OptionsSpec()
     return spec
 end
 
+-- Dragging the bar changes x and y: show them in an open window.
+local POSITION = { x = true, y = true, locked = true, point = true }
+S.OnChange(function(key)
+    if (key == nil or POSITION[key]) and ns.Window and ns.Window.IsShown() then ns.RefreshOptions() end
+end)
+
 ns.On("PLAYER_LOGIN", function() ns.BuildOptions(ns.OptionsSpec()) end)
 ns.Slash[""] = function() ns.Window.Toggle() end
 
@@ -157,6 +164,7 @@ ns.Slash[""] = function() ns.Window.Toggle() end
 if StaticPopupDialogs then
     StaticPopupDialogs.FOREVERCONSUMABLES_EXPORT = {
         text = "", button1 = OKAY or "OK", hasEditBox = 1, editBoxWidth = 350,
+        maxLetters = 0,   -- the edit box is shared; "Save as" leaves its limit behind
         OnShow = function(dialog)
             local box = dialog.GetEditBox and dialog:GetEditBox()
             if box then box:SetText(S.Export()); box:HighlightText(); box:SetFocus() end
@@ -166,6 +174,7 @@ if StaticPopupDialogs then
     }
     StaticPopupDialogs.FOREVERCONSUMABLES_IMPORT = {
         text = "", button1 = ACCEPT or "Accept", button2 = CANCEL or "Cancel", hasEditBox = 1, editBoxWidth = 350,
+        maxLetters = 0,
         OnAccept = function(dialog)
             local box = dialog.GetEditBox and dialog:GetEditBox()
             local ok, err = S.Import(box and box:GetText())

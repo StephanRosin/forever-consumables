@@ -37,6 +37,7 @@ end
 local function newWidget(name, template)
     local w = setmetatable({ _name = name, _scripts = {}, _events = {}, _attrs = {}, _refs = {},
                              _w = 10, _h = 10, _shown = true, _alpha = 1, _scale = 1, _enabled = true }, widget)
+    function w:SetDontSavePosition(v) self._dontSave = v end
     w._protected = template ~= nil and template:find("Secure") ~= nil
     function w:GetName() return self._name end
     function w:SetScript(s, fn) self._scripts[s] = fn end
