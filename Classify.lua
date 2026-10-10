@@ -16,8 +16,8 @@ ns.Classify = Classify
 Classify.SPELLS = { food = 433, drink = 430, refreshment = 167152, healingPotion = 441, restoreMana = 437,
     firstAid = 746, wellFed = 19705 }
 
--- Retail-style consumable subclasses (Forever's data uses them for part of
--- the items).
+-- Retail-style consumable subclasses; Forever's data uses them (checked
+-- with /fcon scan: potions 1, food and drink 5).
 local SUBCLASS = { [1] = "potions", [2] = "elixirs", [3] = "flasks", [4] = "scrolls", [5] = "food", [7] = "bandages" }
 
 local names, cache = nil, {}

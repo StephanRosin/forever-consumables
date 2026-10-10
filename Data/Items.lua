@@ -37,9 +37,9 @@ Items.LISTS = {
         20079, 20080, 20081,                        -- Spirit of Zanza, Sheen of Zanza, Swiftness of Zanza
         8410, 8411, 8412, 8423, 8424,               -- R.O.I.D.S., Lung Juice, Ground Scorpok Assay, Cerebral Cortex, Gizzard Gum
         12820,                                      -- Winterfall Firewater
-        13452, 9206, 9187, 8949, 3390, 2457,        -- Mongoose, Giants, Greater/-/Lesser/Minor Agility
-        9179, 9264, 13454, 9155, 21546, 6373, 17708, -- Greater Intellect, Shadow Power, Greater Arcane, Arcane, Greater Firepower, Firepower, Frost Power
-        3825, 13445, 8951, 3389, 5997,              -- Fortitude, Superior/Greater/-/Minor Defense
+        13452, 9206, 9187, 8949, 3390, 2457,        -- Mongoose, Greater Strength, Greater/-/Lesser/Minor Agility
+        9179, 9264, 13454, 9155, 21546, 6373, 17708, -- Greater Intellect, Shadow Power, Greater Arcane, Arcane, Holy Power, Fire Power, Frost Power
+        3825, 13445, 8951, 3389, 5997,              -- Lesser Fortitude, Greater/-/Lesser/Minor Defense
         13453, 20007, 20004, 3826, 3388, 3382,      -- Brute Force, Mageblood, Major/Mighty/Strong/Weak Troll's Blood
         9088, 9224, 9154, 9233, 6662, 5996, 18294,  -- Gift of Arthas, Demonslaying, Detect Undead, Detect Demon, Giant Growth, Water Breathing, Greater Water Breathing
         2454, 3391, 3383, 2458, 8529,               -- Lion's Strength, Ogre's Strength, Wisdom, Minor Fortitude, Noggenfogger
