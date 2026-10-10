@@ -21,3 +21,6 @@ Locale.lua
 Core.lua
 Profiles.lua
 Settings.lua
+Data\Items.lua
+Classify.lua
+Probe.lua
