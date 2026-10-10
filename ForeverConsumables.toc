@@ -31,3 +31,8 @@ Visibility.lua
 Layout.lua
 Bar.lua
 Picker.lua
+Options\Style.lua
+Options\Widgets.lua
+OptionsPanel.lua
+Options.lua
+MinimapButton.lua
