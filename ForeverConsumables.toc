@@ -30,3 +30,4 @@ Choice.lua
 Visibility.lua
 Layout.lua
 Bar.lua
+Picker.lua
