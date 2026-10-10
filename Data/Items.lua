@@ -2,7 +2,7 @@
 Data/Items.lua -- items sorted by hand: those the use spell and the item
 subclass cannot place (runes, gems, healthstones, Juju, Zanza, the Blasted
 Lands buffs, protection and combat potions). Checked in the client with
-/fcon ids. An item may stand in two lists (Major Rejuvenation Potion).
+/fcon ids (build 70338, 2026-10-10: all IDs known). An item may stand in two lists (Major Rejuvenation Potion).
 -----------------------------------------------------------------------------]]
 
 local ADDON, ns = ...
