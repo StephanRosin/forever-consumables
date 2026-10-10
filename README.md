@@ -28,6 +28,6 @@ the saved variables (after `/reload`), for checking the lists.
     tests/run                    # Lua 5.1, as in the game; tests/run <name> runs tests/run_<name>.lua
     ./install "<WoW>/_classic_beta_/Interface/AddOns"
     tools/package                # dist/ForeverConsumables-<version>.zip
-    tools/release beta "<changelog>"     # CurseForge 1736889; bump ## Version first
+    tools/release release "<changelog>"    # CurseForge 1736889; bump ## Version first
 
 Design: `docs/specs/2026-10-10-forever-consumables-design.md`; plan: `docs/plans/2026-10-10-plan-forever-consumables.md`.
