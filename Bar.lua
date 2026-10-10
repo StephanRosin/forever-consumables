@@ -123,8 +123,10 @@ function Bar.Create()
     mover:RegisterForDrag("LeftButton")
     mover:SetScript("OnDragStart", function() if not InCombatLockdown() then holder:StartMoving() end end)
     mover:SetScript("OnDragStop", function()
-        holder:StopMovingOrSizing()
-        Bar.SavePosition()
+        ns.AfterCombat("drag", function()
+            holder:StopMovingOrSizing()
+            Bar.SavePosition()
+        end)
     end)
     mover:Hide()
     Bar.mover = mover
@@ -146,7 +148,7 @@ function Bar.SavePosition()
     if not left then return end
     local w, h = holder:GetWidth(), holder:GetHeight()
     local s = holder:GetEffectiveScale() / UIParent:GetEffectiveScale()
-    local function coord(p, lo, size)
+    local function coord(p, lo)
         if p:find(lo == "x" and "LEFT" or "BOTTOM") then return 0 end
         if p:find(lo == "x" and "RIGHT" or "TOP") then return 1 end
         return 0.5
@@ -196,15 +198,22 @@ function Bar.ApplyVisibility()
     end)
 end
 
-function Bar.ApplyAlpha()
+-- inCombat: PLAYER_REGEN_DISABLED fires before the lockdown starts, so the
+-- event handlers say it explicitly.
+function Bar.ApplyAlpha(inCombat)
     if not Bar.holder then return end
+    if inCombat == nil then inCombat = InCombatLockdown() end
     local over = Bar.holder:IsMouseOver()
-    Bar.holder:SetAlpha(ns.Visibility.Alpha(S.Get, InCombatLockdown(), over))
+    Bar.holder:SetAlpha(ns.Visibility.Alpha(S.Get, inCombat, over))
 end
 
 -- Icons, counts, cooldowns, greying, arrows: allowed in combat.
-function Bar.UpdateDisplay()
-    local combat = InCombatLockdown()
+-- The arrows are implicitly protected (anchored to the secure buttons): SetEnabled
+-- only when not locked down, i.e. at combat start (explicit inCombat) and after it.
+function Bar.UpdateDisplay(inCombat)
+    local combat = inCombat
+    if combat == nil then combat = InCombatLockdown() end
+    local locked = InCombatLockdown()
     for cat, b in pairs(buttons) do
         if b:IsShown() then
             local e = b.entry
@@ -221,7 +230,7 @@ function Bar.UpdateDisplay()
                 b.count:SetText("")
                 b.cooldown:Clear()
             end
-            b.arrow:SetEnabled(not combat)
+            if not locked then b.arrow:SetEnabled(not combat) end
             b.arrow.icon:SetDesaturated(combat)
         end
     end
@@ -231,7 +240,7 @@ function Bar.Refresh()
     if not Bar.holder then return end
     if InCombatLockdown() then
         dirty = true
-        Bar.UpdateDisplay()
+        Bar.UpdateDisplay(true)
         return
     end
     dirty = false
@@ -305,20 +314,22 @@ function Bar.ButtonOf(cat) return buttons[cat] end
 -- Events ------------------------------------------------------------------------
 
 ns.On("PLAYER_LOGIN", function()
-    Bar.Create()
-    Bar.Refresh()
-    Bar.ApplyVisibility()
+    ns.AfterCombat("create", function()
+        Bar.Create()
+        Bar.Refresh()
+        Bar.ApplyVisibility()
+    end)
 end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
-ns.On("BAG_UPDATE_COOLDOWN", Bar.UpdateDisplay)
+ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
 ns.On("PLAYER_REGEN_DISABLED", function()
-    Bar.UpdateDisplay()
-    Bar.ApplyAlpha()
+    Bar.UpdateDisplay(true)
+    Bar.ApplyAlpha(true)
 end)
 ns.On("PLAYER_REGEN_ENABLED", function()
-    if dirty then Bar.Refresh() else Bar.UpdateDisplay() end
-    Bar.ApplyAlpha()
+    if dirty then Bar.Refresh() else Bar.UpdateDisplay(false) end
+    Bar.ApplyAlpha(false)
 end)
 -- Instance and taxi: the driver is rebuilt a moment after they change.
 local function later() C_Timer.After(0.2, Bar.ApplyVisibility) end

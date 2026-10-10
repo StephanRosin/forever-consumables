@@ -68,10 +68,14 @@ local function newWidget(name, template)
         guard(self, "SetPoint")
         if type(rel) == "number" then x, y, rel, p2 = rel, p2, nil, nil end
         self._point = { p, rel, p2, x, y }
+        if type(rel) == "table" and rel._protected then self._protected = true end  -- anchored to a protected frame
     end
     function w:GetPoint() local a = self._point; if a then return a[1], a[2], a[3], a[4], a[5] end end
     function w:ClearAllPoints() guard(self, "ClearAllPoints"); self._point = nil end
-    function w:SetAllPoints(rel) self._allPoints = rel or true end
+    function w:SetAllPoints(rel)
+        self._allPoints = rel or true
+        if type(rel) == "table" and rel._protected then self._protected = true end
+    end
     function w:SetAttribute(k, v) guard(self, "SetAttribute"); self._attrs[k] = v end
     function w:GetAttribute(k) return self._attrs[k] end
     function w:SetFrameRef(k, f) self._refs[k] = f end
@@ -80,9 +84,9 @@ local function newWidget(name, template)
     function w:UnregisterEvent(e) self._events[e] = nil end
     function w:RegisterForClicks(...) self._clicks = { ... } end
     function w:RegisterForDrag(...) self._drag = { ... } end
-    function w:Enable() self._enabled = true end
-    function w:Disable() self._enabled = false end
-    function w:SetEnabled(v) self._enabled = v and true or false end
+    function w:Enable() guard(self, "Enable"); self._enabled = true end
+    function w:Disable() guard(self, "Disable"); self._enabled = false end
+    function w:SetEnabled(v) guard(self, "SetEnabled"); self._enabled = v and true or false end
     function w:IsEnabled() return self._enabled end
     function w:SetParent(p) self._parent = p end
     function w:GetParent() return self._parent end
@@ -167,8 +171,14 @@ end
 
 function InCombatLockdown() return M.combat end
 function M.setCombat(on)
-    M.combat = on
-    M.Fire(on and "PLAYER_REGEN_DISABLED" or "PLAYER_REGEN_ENABLED")
+    -- Real client: REGEN_DISABLED fires before lockdown starts, REGEN_ENABLED after it ends.
+    if on then
+        M.Fire("PLAYER_REGEN_DISABLED")
+        M.combat = true
+    else
+        M.combat = false
+        M.Fire("PLAYER_REGEN_ENABLED")
+    end
 end
 
 function RegisterStateDriver(f, state, driver)
