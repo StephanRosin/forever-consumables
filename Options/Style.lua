@@ -57,17 +57,3 @@ function Style.Paint(textRegion, colorKey)
     local c = Style.COLORS[colorKey]
     textRegion:SetTextColor(c[1], c[2], c[3], c[4])
 end
-
--- A tiny event helper for the widgets (fn(event, ...) per event).
-local handlers = {}
-local events = CreateFrame("Frame")
-events:SetScript("OnEvent", function(_, event, ...)
-    for _, fn in ipairs(handlers[event] or {}) do fn(event, ...) end
-end)
-function ns.On(event, fn)
-    if not handlers[event] then
-        handlers[event] = {}
-        pcall(events.RegisterEvent, events, event)
-    end
-    table.insert(handlers[event], fn)
-end

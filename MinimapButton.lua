@@ -153,4 +153,9 @@ function ForeverConsumables_OnAddonCompartmentLeave(_, menuButton)
     if menuButton and GameTooltip:IsOwned(menuButton) then GameTooltip:Hide() end
 end
 
+-- The setting changed (options, profile switch, import): follow it.
+ns.Settings.OnChange(function(key)
+    if key == nil or key == "minimapShow" or key == "minimapAngle" then Button.Place() end
+end)
+
 ns.On("PLAYER_LOGIN", Button.Create)

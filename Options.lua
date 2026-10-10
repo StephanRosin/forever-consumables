@@ -33,13 +33,6 @@ local function color(key, label) return bind(key, { type = "color", label = labe
 local function generalTab()
     return {
         { type = "tab", label = "TAB_GENERAL" },
-        { type = "select", label = "OPT_LANGUAGE",
-          choices = function()
-              local list = { { value = "AUTO", label = L.LANGUAGE_AUTO } }
-              for _, c in ipairs(ns.Locale.CHOICES) do list[#list + 1] = c end
-              return list
-          end,
-          get = function() return ns.Locale.Setting() end, set = function(v) ns.Locale.Set(v) end },
         { type = "header", label = "OPT_MINIMAP" },
         check("minimapShow", "OPT_MINIMAP_SHOW"),
         { type = "header", label = "OPT_PROFILE" },

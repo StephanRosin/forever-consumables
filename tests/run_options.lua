@@ -60,8 +60,27 @@ ForeverConsumables_OnAddonCompartmentLeave(nil, M.newWidget("menu"))
 -- The minimap button follows the setting; Media.FontPath is Media.lua's.
 local button = ns.MinimapButton.button
 M.check("minimap button made", button ~= nil, true)
-S.Set("minimapShow", false); ns.MinimapButton.Place()
+rows.OPT_MINIMAP_SHOW.set(false)
 M.check("minimap button hidden", button:IsShown(), false)
+S.Set("minimapShow", true)
+M.check("minimap button shown again", button:IsShown(), true)
 M.check("font path from Media", ns.Media.FontPath("Morpheus"), "Fonts\\MORPHEUS.TTF")
+
+-- Late ns.On handlers still get the event's own arguments (Style.lua must not replace Core's ns.On).
+local got
+ns.On("FC_TEST_EVENT", function(arg) got = arg end)
+M.Fire("FC_TEST_EVENT", "payload")
+M.check("ns.On passes event arguments", got, "payload")
+
+-- Every select row's choices carry real translations, not the echoed key.
+local raw = {}
+for _, opt in ipairs(spec) do
+    if opt.type == "select" and opt.choices then
+        for _, c in ipairs(opt.choices()) do
+            if c.label == nil or c.label:match("^[A-Z][A-Z0-9_]+$") then raw[#raw + 1] = tostring(c.label) end
+        end
+    end
+end
+M.check("select choices translated", table.concat(raw, ","), "")
 
 M.done()
