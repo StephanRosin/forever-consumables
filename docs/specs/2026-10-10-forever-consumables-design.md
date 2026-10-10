@@ -29,7 +29,7 @@ a left click uses it; everything about the bar is configurable, and it can alway
      button. Out of combat only: in combat the arrow is greyed and does nothing.
    - Option: open the list with a right click instead of the arrow (the arrow then is hidden).
    - Tooltip: the item's tooltip, below it "Left-click: use", "Arrow: choose" (switchable).
-3. **Categories** (1.0; weapon buffs come later):
+3. **Categories** (1.0, ten; weapon buffs and explosives come later):
 
    | Category | Contents |
    |---|---|
@@ -39,15 +39,24 @@ a left click uses it; everything about the bar is configurable, and it can alway
    | Mana | mana potions, mana gems, Night Dragon's Breath, Dark Rune, Demonic Rune |
    | Flasks | flasks |
    | Elixirs | elixirs, Juju, Zanza, the Blasted Lands buffs (R.O.I.D.S., Ground Scorpok Assay, …) |
+   | Potions | combat and utility potions: Rage, Great and Mighty Rage; Forever's Frenzy (attack power), Spellblasting (spell damage) and Mender's (healing) potions in all ranks; Beast Culling, Elemental Siphoning; Swiftness, Invisibility, Lesser Invisibility, Limited Invulnerability, Magic Resistance; Dragonfire, Caustic Smog, Disorienting Smog; Thistle Tea |
    | Protection | protection potions (fire, shadow, nature, frost, arcane, holy), Free Action, Restorative, Living Action |
    | Scrolls | scrolls |
    | Bandages | bandages |
 
    - Order of classification: a curated ID list first (Data/Items.lua: Felwood, Juju, Zanza, runes, gems,
-     healthstones, Blasted Lands, protection potions), then the use spell (Food / Drink / Refreshment — the latter
-     in both Food and Drink), then the subclass (Potion, Elixir, Flask, Scroll, Bandage), then the use spell's
-     effect for potions without a subclass (restores health → Healing, restores mana → Mana). Anything left over
-     is not shown.
+     healthstones, Blasted Lands, protection potions, the named combat potions), then the use spell (Food / Drink /
+     Refreshment — the latter in both Food and Drink), then the subclass (Elixir, Flask, Scroll, Bandage), then
+     potions by their use spell's effect (restores health → Healing, restores mana → Mana, both → both; Forever's
+     Discolored, Perishable and Restored healing potions and Tessa's Tonic included). Any other potion goes to
+     **Potions**, so new Forever potions show without a list update. Anything left over is not shown.
+   - Forever adds items Classic Era lacks (beta data, fan databases, 2026-10): Frenzy, Spellblasting and Mender's
+     potions, slayer potions, smog potions, Dragonfire Potion, Discolored/Perishable/Restored healing potions,
+     Tessa's Tonic, and zone flasks (Natural Swiftness/Accuracy/Aggression/Precision: +60 Stamina, bonus only in
+     Hyjal and the Barrow Deeps) — those go to Flasks. There is no haste potion as in TBC. The ID list is checked
+     against the client before release.
+   - Thrown potions (Caustic Smog, Disorienting Smog) use the item like the bag does: the client then asks for
+     the ground target.
    - Each category can be switched on or off and moved in the order (Options > Categories).
    - **Empty categories** are hidden (switchable). Hiding and showing happen out of combat only; a button that runs
      empty in combat stays, greyed, until combat ends.
@@ -82,13 +91,14 @@ a left click uses it; everything about the bar is configurable, and it can alway
 ## 3. Not in 1.0
 
 - Weapon buffs (whetstones, oils, poisons) with left/right hand and time left.
+- Explosives (grenades, dynamite, sapper charges).
 - Glow when a flask/elixir/food buff is missing.
 - Key bindings per category.
 - Low-stock warning.
 
 ## 4. Tests
 
-Classification (ID list, Food/Drink/Refreshment, subclasses, leftover items not shown); automatic choice (level,
+Classification (ID list, Food/Drink/Refreshment, subclasses, potions by effect, any other potion to Potions, leftover items not shown); automatic choice (level,
 item level, conjured first, buff food never automatic, fallback and return of a chosen item); count over several
 bags; empty categories hidden out of combat, kept greyed in combat; arrow and menu disabled in combat; collapse and
 reopen, also in combat, saved per character; the visibility driver's string for every mode and condition; layout
