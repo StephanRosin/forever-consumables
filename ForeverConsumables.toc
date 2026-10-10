@@ -26,3 +26,5 @@ Classify.lua
 Probe.lua
 Bags.lua
 Choice.lua
+Visibility.lua
+Layout.lua
