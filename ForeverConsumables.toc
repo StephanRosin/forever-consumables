@@ -24,3 +24,5 @@ Settings.lua
 Data\Items.lua
 Classify.lua
 Probe.lua
+Bags.lua
+Choice.lua
