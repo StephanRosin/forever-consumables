@@ -18,6 +18,7 @@ Locales\deDE.lua
 Locales\esES.lua
 Locales\frFR.lua
 Locale.lua
+Media.lua
 Core.lua
 Profiles.lua
 Settings.lua
@@ -28,3 +29,4 @@ Bags.lua
 Choice.lua
 Visibility.lua
 Layout.lua
+Bar.lua

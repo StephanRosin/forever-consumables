@@ -1,0 +1,107 @@
+-- The bar's frames: refresh, combat, collapse, visibility, mover.
+local M = dofile("mock.lua")
+print("Bar")
+M.spells = { [433] = "Food", [430] = "Drink", [441] = "Healing Potion" }
+M.items = {
+    [929] = { name = "Healing Potion", spell = "Healing Potion", minLevel = 12, itemLevel = 22, icon = 2 },
+    [13446] = { name = "Major Healing Potion", spell = "Healing Potion", minLevel = 45, itemLevel = 55, icon = 3 },
+    [4599] = { name = "Cured Ham Steak", spell = "Food", minLevel = 35, itemLevel = 45, icon = 5 },
+    [8766] = { name = "Morning Glory Dew", spell = "Drink", minLevel = 45, itemLevel = 55, icon = 8 },
+}
+M.bags = { [929] = 2, [13446] = 1, [4599] = 10, [8766] = 5 }
+local ns = M.LoadAddon()
+local Bar, S = ns.Bar, ns.Settings
+M.Fire("ADDON_LOADED", "ForeverConsumables")
+M.Fire("PLAYER_LOGIN")
+M.flush()
+
+local function shown(cat) local b = Bar.ButtonOf(cat); return b ~= nil and b:IsShown() end
+M.check("food shown", shown("food"), true)
+M.check("drink shown", shown("drink"), true)
+M.check("healing shown", shown("healing"), true)
+M.check("empty flasks hidden", shown("flasks"), false)
+local heal = Bar.ButtonOf("healing")
+M.check("item attribute", heal:GetAttribute("item"), "item:13446")
+M.check("type item", heal:GetAttribute("type"), "item")
+M.check("count text", heal.count:GetText(), "1")
+M.check("icon", heal.icon:GetTexture(), 3)
+M.check("order: food first", select(4, Bar.ButtonOf("food"):GetPoint()), 3)
+
+M.Click(heal, "LeftButton", true)
+M.Click(heal, "LeftButton", false)
+M.check("left click uses once", #M.used, 1)
+M.check("used the potion", M.used[1], "item:13446")
+
+-- Empty categories kept when asked.
+S.Set("hideEmpty", false)
+M.check("empty flasks kept", shown("flasks"), true)
+M.check("empty: category icon", Bar.ButtonOf("flasks").icon:GetTexture(), Bar.ICONS.flasks)
+M.check("empty: greyed", Bar.ButtonOf("flasks").icon:IsDesaturated(), true)
+S.Set("hideEmpty", true)
+S.Set("show_drink", false)
+M.check("switched off", shown("drink"), false)
+S.Set("show_drink", true)
+
+-- In combat: nothing protected changes; the last potion is used up.
+M.setCombat(true)
+M.bags[13446] = 0
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("combat: button stays", heal:IsShown(), true)
+M.check("combat: attribute unchanged", heal:GetAttribute("item"), "item:13446")
+M.check("combat: greyed", heal.icon:IsDesaturated(), true)
+M.check("combat: count 0", heal.count:GetText(), "0")
+M.check("combat: arrow disabled", heal.arrow:IsEnabled(), false)
+M.setCombat(false)
+M.check("after combat: next best", heal:GetAttribute("item"), "item:929")
+M.check("after combat: arrow enabled", heal.arrow:IsEnabled(), true)
+
+-- Settings changed in combat apply after it.
+M.setCombat(true)
+S.Set("size", 40)
+M.check("combat: size waits", heal:GetWidth(), 36)
+M.setCombat(false)
+M.check("after combat: size", heal:GetWidth(), 40)
+
+-- Collapse: also in combat, saved per character.
+local toggle = Bar.toggle
+M.setCombat(true)
+M.Click(toggle, "LeftButton")
+M.check("collapsed in combat", Bar.bar:IsShown(), false)
+M.check("saved", ns.CharDB().collapsed, true)
+M.Click(toggle, "LeftButton")
+M.check("opened again", Bar.bar:IsShown(), true)
+M.check("saved open", ns.CharDB().collapsed, false)
+M.setCombat(false)
+M.Click(toggle, "LeftButton")
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("refresh keeps it collapsed", Bar.bar:IsShown(), false)
+M.Click(toggle, "LeftButton")
+
+-- Visibility driver.
+S.Set("visMode", "COMBAT")
+M.check("driver", M.drivers[Bar.holder].visibility, "[dead] hide; [combat] show; hide")
+S.Set("visInstance", true)
+M.check("instance only, outside", M.drivers[Bar.holder].visibility, "hide")
+M.instance = "party"
+M.Fire("PLAYER_ENTERING_WORLD")
+M.flush()
+M.check("instance only, inside", M.drivers[Bar.holder].visibility, "[dead] hide; [combat] show; hide")
+S.Set("visInstance", false); S.Set("visMode", "ALWAYS")
+
+-- Alpha follows combat.
+S.Set("alphaNoCombat", 50)
+M.check("alpha out of combat", Bar.holder:GetAlpha(), 0.5)
+M.setCombat(true)
+M.check("alpha in combat", Bar.holder:GetAlpha(), 1)
+M.setCombat(false)
+
+-- Position and the mover.
+S.Set("point", "TOPLEFT"); S.Set("x", 100); S.Set("y", -50)
+local p, rel, p2, x, y = Bar.holder:GetPoint()
+M.check("point", p .. ":" .. p2 .. ":" .. x .. ":" .. y, "TOPLEFT:TOPLEFT:100:-50")
+S.Set("locked", false)
+M.check("mover shown", Bar.mover:IsShown(), true)
+S.Set("locked", true)
+M.check("mover hidden", Bar.mover:IsShown(), false)
+
+M.done()
