@@ -6,6 +6,7 @@
 ## Notes-esMX: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos y vendas.
 ## Notes-frFR: Une petite barre pour nourriture, boissons, potions, flacons, élixirs, parchemins et bandages.
 ## Version: 1.0.0
+## X-Curse-Project-ID: 1736889
 ## IconTexture: Interface\Icons\INV_Potion_54
 ## AddonCompartmentFunc: ForeverConsumables_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: ForeverConsumables_OnAddonCompartmentEnter
