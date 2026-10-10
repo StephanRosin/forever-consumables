@@ -20,3 +20,4 @@ Locales\frFR.lua
 Locale.lua
 Core.lua
 Profiles.lua
+Settings.lua
