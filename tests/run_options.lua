@@ -83,4 +83,16 @@ for _, opt in ipairs(spec) do
 end
 M.check("select choices translated", table.concat(raw, ","), "")
 
+-- The General tab places the bar too.
+local general, inGeneral = {}, false
+for _, opt in ipairs(spec) do
+    if opt.type == "tab" then inGeneral = (opt.label == "TAB_GENERAL") end
+    if inGeneral and opt.settingKey then general[opt.settingKey] = opt end
+end
+for _, key in ipairs({ "locked", "point", "x", "y" }) do
+    M.check("general tab row " .. key, general[key] ~= nil, true)
+end
+general.x.set(77)
+M.check("x via general tab", S.Get("x"), 77)
+
 M.done()

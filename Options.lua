@@ -33,6 +33,11 @@ local function color(key, label) return bind(key, { type = "color", label = labe
 local function generalTab()
     return {
         { type = "tab", label = "TAB_GENERAL" },
+        { type = "header", label = "OPT_POSITION" },
+        check("locked", "OPT_LOCKED"),
+        select("point", "OPT_POINT", "POINT_"),
+        slider("x", "OPT_X", "px"),
+        slider("y", "OPT_Y", "px"),
         { type = "header", label = "OPT_MINIMAP" },
         check("minimapShow", "OPT_MINIMAP_SHOW"),
         { type = "header", label = "OPT_PROFILE" },
