@@ -1,6 +1,6 @@
 # Forever Consumables
 
-A small bar for WoW: Forever with one button per consumable category: food, drink, healing, mana, potions,
+A small bar for WoW: Forever with one button per consumable category: food, drink, healing, healthstone, mana, potions,
 flasks, elixirs, protection potions, scrolls and bandages. A left click uses the item; a right click
 (or, as an option, a small arrow beside or below the button) opens the list that picks which item of the category it uses, or "Automatic (best)". Empty
 categories are hidden. The bar can always be collapsed to a small button, also in combat.

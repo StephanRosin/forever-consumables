@@ -1,6 +1,6 @@
 **Summary**
 
-A small, movable bar for your consumables: food, drink, healing and mana potions, combat potions, flasks, elixirs, protection potions, scrolls and bandages. Pick the item per category with a right click, click to use it, collapse the bar with one click, even in combat.
+A small, movable bar for your consumables: food, drink, healing and mana potions, healthstones, combat potions, flasks, elixirs, protection potions, scrolls and bandages. Pick the item per category with a right click, click to use it, collapse the bar with one click, even in combat.
 
 ---
 
@@ -21,7 +21,8 @@ A consumables bar for **WoW: Forever**. One button per category shows the item i
 - Prefer a **small arrow** beside or below each button to open the list? One setting.
 
 ## What counts as what
-- Healing potions, healthstones, Whipper Root Tuber, Major Rejuvenation Potion.
+- Healing potions, Whipper Root Tuber, Major Rejuvenation Potion.
+- Healthstones get their own button: their cooldown is separate, so you can use one right after a potion.
 - Mana potions, mana gems, Night Dragon's Breath, Dark and Demonic Runes.
 - Rage, Swiftness, Invisibility, Limited Invulnerability, Magic Resistance potions, Thistle Tea, and **Forever's new potions** (Frenzy, Spellblasting, Mender's, ...): any potion that is not healing, mana or protection lands in **Potions**, so new ones show up without an update.
 - Flasks, elixirs, Juju, Zanza, the Blasted Lands buffs, Winterfall Firewater.

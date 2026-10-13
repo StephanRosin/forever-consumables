@@ -10,7 +10,7 @@ local ADDON, ns = ...
 local Settings = {}
 ns.Settings = Settings
 
-Settings.CATEGORIES = { "food", "drink", "healing", "mana", "potions", "flasks", "elixirs", "protection",
+Settings.CATEGORIES = { "food", "drink", "healing", "healthstone", "mana", "potions", "flasks", "elixirs", "protection",
     "scrolls", "bandages" }
 Settings.POINTS = { "TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "CENTER", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT" }
 

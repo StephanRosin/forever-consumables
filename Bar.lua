@@ -18,7 +18,7 @@ ns.Bar = Bar
 
 Bar.ICONS = {
     food = "Interface\\Icons\\INV_Misc_Food_14", drink = "Interface\\Icons\\INV_Drink_07",
-    healing = "Interface\\Icons\\INV_Potion_54", mana = "Interface\\Icons\\INV_Potion_76",
+    healing = "Interface\\Icons\\INV_Potion_54", healthstone = "Interface\\Icons\\INV_Stone_04", mana = "Interface\\Icons\\INV_Potion_76",
     potions = "Interface\\Icons\\INV_Potion_41", flasks = "Interface\\Icons\\INV_Potion_62",
     elixirs = "Interface\\Icons\\INV_Potion_32", protection = "Interface\\Icons\\INV_Potion_16",
     scrolls = "Interface\\Icons\\INV_Scroll_03", bandages = "Interface\\Icons\\INV_Misc_Bandage_15",
@@ -30,7 +30,8 @@ local ARROW_ICON = 12
 
 local GREY = { 0.5, 0.5, 0.5, 1 }   -- count text at zero
 local NOT_IN_COMBAT = { food = true, drink = true }   -- eating and drinking need you out of combat
-local NO_MANA = { WARRIOR = true, ROGUE = true, DEATHKNIGHT = true }   -- these never drink
+local NO_MANA = { WARRIOR = true, ROGUE = true, DEATHKNIGHT = true }
+local MANA_ONLY = { drink = true, mana = true }   -- hidden for the classes above
 local buttons = {}      -- cat -> button
 local lastScan = {}     -- cat -> entries
 local dirty = false
@@ -254,11 +255,11 @@ function Bar.Refresh()
     dirty = false
     lastScan = ns.Bags.Scan()
     local level = UnitLevel("player") or 1
-    local noDrink = NO_MANA[select(2, UnitClass("player"))]
+    local noMana = NO_MANA[select(2, UnitClass("player"))]
     local visible = {}
     for _, cat in ipairs(S.Order()) do
         local list = lastScan[cat]
-        if S.Get("show_" .. cat) and not (noDrink and cat == "drink") and (#list > 0 or not S.Get("hideEmpty")) then
+        if S.Get("show_" .. cat) and not (noMana and MANA_ONLY[cat]) and (#list > 0 or not S.Get("hideEmpty")) then
             visible[#visible + 1] = cat
         end
     end

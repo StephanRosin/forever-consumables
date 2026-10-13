@@ -7,8 +7,10 @@ M.items = {
     [13446] = { name = "Major Healing Potion", spell = "Healing Potion", minLevel = 45, itemLevel = 55, icon = 3 },
     [4599] = { name = "Cured Ham Steak", spell = "Food", minLevel = 35, itemLevel = 45, icon = 5 },
     [8766] = { name = "Morning Glory Dew", spell = "Drink", minLevel = 45, itemLevel = 55, icon = 8 },
+    [13444] = { name = "Major Mana Potion", minLevel = 49, itemLevel = 59, icon = 9 },
+    [19006] = { name = "Lesser Healthstone", minLevel = 0, itemLevel = 1, icon = 10 },
 }
-M.bags = { [929] = 2, [13446] = 1, [4599] = 10, [8766] = 5 }
+M.bags = { [929] = 2, [13446] = 1, [4599] = 10, [8766] = 5, [13444] = 3, [19006] = 1 }
 local ns = M.LoadAddon()
 local Bar, S = ns.Bar, ns.Settings
 M.Fire("ADDON_LOADED", "ForeverConsumables")
@@ -19,6 +21,9 @@ local function shown(cat) local b = Bar.ButtonOf(cat); return b ~= nil and b:IsS
 M.check("food shown", shown("food"), true)
 M.check("drink shown", shown("drink"), true)
 M.check("healing shown", shown("healing"), true)
+M.check("healthstone beside it", shown("healthstone"), true)
+M.check("healing keeps the potion", Bar.ButtonOf("healing"):GetAttribute("item"), "item:13446")
+M.check("mana shown", shown("mana"), true)
 M.check("empty flasks hidden", shown("flasks"), false)
 local heal = Bar.ButtonOf("healing")
 M.check("item attribute", heal:GetAttribute("item"), "item:13446")
@@ -64,6 +69,7 @@ M.check("after combat: food in colour", Bar.ButtonOf("food").icon:IsDesaturated(
 M.class = "WARRIOR"
 M.Fire("BAG_UPDATE_DELAYED")
 M.check("warrior: no drink", shown("drink"), false)
+M.check("warrior: no mana", shown("mana"), false)
 M.check("warrior: food stays", shown("food"), true)
 M.class = nil
 M.Fire("BAG_UPDATE_DELAYED")

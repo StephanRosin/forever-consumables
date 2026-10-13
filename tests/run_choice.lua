@@ -12,7 +12,6 @@ M.items = {
     [8079] = { name = "Conjured Crystal Water", spell = "Drink", minLevel = 55, itemLevel = 65, icon = 7 },
     [8766] = { name = "Morning Glory Dew", spell = "Drink", minLevel = 45, itemLevel = 55, icon = 8 },
 }
--- The healthstone stays out of the bags here: conjured, it would win every healing pick.
 M.bags = { [118] = 4, [929] = 2, [13446] = 1, [4599] = 10, [21023] = 3, [8079] = 20, [8766] = 5 }
 local ns = M.LoadAddon()
 local B, C = ns.Bags, ns.Choice

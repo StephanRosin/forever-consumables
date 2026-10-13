@@ -13,10 +13,11 @@ ns.Items = Items
 Items.LISTS = {
     healing = {
         118, 858, 929, 1710, 3928, 13446,           -- Minor .. Major Healing Potion
-        5512, 19004, 19005, 5511, 19006, 19007, 5509, 19008, 19009, 5510, 19010, 19011, 9421, 19012, 19013, -- healthstones
         11951,                                      -- Whipper Root Tuber (Felwood)
         18253, 9144,                                -- Major Rejuvenation, Wildvine Potion
     },
+    -- Own cooldown, usable next to a healing potion: its own button.
+    healthstone = { 5512, 19004, 19005, 5511, 19006, 19007, 5509, 19008, 19009, 5510, 19010, 19011, 9421, 19012, 19013 },
     mana = {
         2455, 3385, 3827, 6149, 13443, 13444,       -- Minor .. Major Mana Potion
         5514, 5513, 8007, 8008,                     -- Mana Agate, Jade, Citrine, Ruby
