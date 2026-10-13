@@ -29,6 +29,8 @@ local ARROW_ATLAS = { RIGHT = "friendslist-categorybutton-arrow-right", BELOW = 
 local ARROW_ICON = 12
 
 local GREY = { 0.5, 0.5, 0.5, 1 }   -- count text at zero
+local NOT_IN_COMBAT = { food = true, drink = true }   -- eating and drinking need you out of combat
+local NO_MANA = { WARRIOR = true, ROGUE = true, DEATHKNIGHT = true }   -- these never drink
 local buttons = {}      -- cat -> button
 local lastScan = {}     -- cat -> entries
 local dirty = false
@@ -224,7 +226,7 @@ function Bar.UpdateDisplay()
             if e then
                 local count = C_Item.GetItemCount(e.id) or 0
                 b.icon:SetTexture(e.icon)
-                b.icon:SetDesaturated(count == 0)
+                b.icon:SetDesaturated(count == 0 or (combat and NOT_IN_COMBAT[cat] == true))
                 b.count:SetText(tostring(count))
                 local c = count == 0 and GREY or S.Get("countColor")
                 b.count:SetTextColor(c[1], c[2], c[3], c[4])
@@ -252,10 +254,11 @@ function Bar.Refresh()
     dirty = false
     lastScan = ns.Bags.Scan()
     local level = UnitLevel("player") or 1
+    local noDrink = NO_MANA[select(2, UnitClass("player"))]
     local visible = {}
     for _, cat in ipairs(S.Order()) do
         local list = lastScan[cat]
-        if S.Get("show_" .. cat) and (#list > 0 or not S.Get("hideEmpty")) then
+        if S.Get("show_" .. cat) and not (noDrink and cat == "drink") and (#list > 0 or not S.Get("hideEmpty")) then
             visible[#visible + 1] = cat
         end
     end

@@ -17,7 +17,7 @@ values.visMode = "COMBAT"; M.check("combat", V.Driver(get, env), "[combat] show;
 values.visMode = "NOCOMBAT"; M.check("no combat", V.Driver(get, env), "[combat] hide; show")
 values.visMode = "NEVER"; M.check("never", V.Driver(get, env), "hide")
 base(); values.visHideDead = true; values.visGroup = true
-M.check("dead and group", V.Driver(get, env), "[dead] hide; [nogroup] hide; show")
+M.check("dead and group", V.Driver(get, env), "[@player,dead] hide; [nogroup] hide; show")
 base(); values.visInstance = true
 M.check("instance only, outside", V.Driver(get, env), "hide")
 M.check("instance only, inside", V.Driver(get, { inInstance = true, onTaxi = false }), "show")

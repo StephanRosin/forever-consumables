@@ -52,10 +52,22 @@ M.check("combat: greyed", heal.icon:IsDesaturated(), true)
 M.check("combat: count 0", heal.count:GetText(), "0")
 M.check("combat: arrow disabled (set at combat start)", heal.arrow:IsEnabled(), false)
 M.check("combat: arrow icon greyed", heal.arrow.icon:IsDesaturated(), true)
+M.check("combat: food greyed", Bar.ButtonOf("food").icon:IsDesaturated(), true)
+M.check("combat: drink greyed", Bar.ButtonOf("drink").icon:IsDesaturated(), true)
 M.check("combat: cooldown update makes no protected call", pcall(M.Fire, "BAG_UPDATE_COOLDOWN"), true)
 M.setCombat(false)
 M.check("after combat: next best", heal:GetAttribute("item"), "item:929")
 M.check("after combat: arrow enabled", heal.arrow:IsEnabled(), true)
+M.check("after combat: food in colour", Bar.ButtonOf("food").icon:IsDesaturated(), false)
+
+-- No mana, no drink.
+M.class = "WARRIOR"
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("warrior: no drink", shown("drink"), false)
+M.check("warrior: food stays", shown("food"), true)
+M.class = nil
+M.Fire("BAG_UPDATE_DELAYED")
+M.check("priest: drink", shown("drink"), true)
 
 -- Settings changed in combat apply after it.
 M.setCombat(true)
@@ -81,13 +93,13 @@ M.Click(toggle, "LeftButton")
 
 -- Visibility driver.
 S.Set("visMode", "COMBAT")
-M.check("driver", M.drivers[Bar.holder].visibility, "[dead] hide; [combat] show; hide")
+M.check("driver", M.drivers[Bar.holder].visibility, "[@player,dead] hide; [combat] show; hide")
 S.Set("visInstance", true)
 M.check("instance only, outside", M.drivers[Bar.holder].visibility, "hide")
 M.instance = "party"
 M.Fire("PLAYER_ENTERING_WORLD")
 M.flush()
-M.check("instance only, inside", M.drivers[Bar.holder].visibility, "[dead] hide; [combat] show; hide")
+M.check("instance only, inside", M.drivers[Bar.holder].visibility, "[@player,dead] hide; [combat] show; hide")
 S.Set("visInstance", false); S.Set("visMode", "ALWAYS")
 
 -- Alpha follows combat.

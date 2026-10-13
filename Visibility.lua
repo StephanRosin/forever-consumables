@@ -18,7 +18,8 @@ function Visibility.Driver(get, env)
     if get("visInstance") and not env.inInstance then return "hide" end
     if get("visHideTaxi") and env.onTaxi then return "hide" end
     local parts = {}
-    if get("visHideDead") then parts[#parts + 1] = "[dead] hide" end
+    -- Plain [dead] tests the target, so a looted corpse hid the bar.
+    if get("visHideDead") then parts[#parts + 1] = "[@player,dead] hide" end
     if get("visGroup") then parts[#parts + 1] = "[nogroup] hide" end
     parts[#parts + 1] = BASE[mode] or "show"
     return table.concat(parts, "; ")

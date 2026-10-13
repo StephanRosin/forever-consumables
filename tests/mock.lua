@@ -194,6 +194,7 @@ function UnregisterStateDriver(f, state) if M.drivers[f] then M.drivers[f][state
 function IsModifierKeyDown() return M.modifier or false end
 function GetLocale() return M.locale or "enUS" end
 function UnitLevel() return M.level end
+function UnitClass() return "Priest", M.class or "PRIEST" end
 function UnitOnTaxi() return M.taxi end
 function UnitIsDeadOrGhost() return M.dead end
 function IsInInstance()
