@@ -243,8 +243,9 @@ C_Item = {
     end,
     GetItemSpell = function(id)
         local it = M.items[id]
-        if it and it.spell then return it.spell, it.spellID end
+        if it and it.spell and not it.uncached then return it.spell, it.spellID end
     end,
+    IsItemDataCachedByID = function(id) local it = M.items[id] return it ~= nil and not it.uncached end,
     GetItemCount = function(id) return M.bags[id] or 0 end,
     RequestLoadItemDataByID = function() end,
 }

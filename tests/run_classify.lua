@@ -87,4 +87,10 @@ M.flush()
 M.check("ids checked: known", ns.CharDB().ids[13446], "Major Healing Potion")
 M.check("ids checked: unknown", ns.CharDB().ids[13510], false)
 
+-- Not loaded yet: no spell, so the subclass guess (food) must not stick.
+M.items[159] = { name = "Refreshing Spring Water", subclassID = 5, spell = "Drink", uncached = true }
+M.check("uncached water: subclass guess", of(159), "food")
+M.items[159].uncached = nil
+M.check("loaded water: drink", of(159), "drink")
+
 M.done()

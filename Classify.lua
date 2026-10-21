@@ -55,7 +55,8 @@ local function compute(id)
     local _, _, _, _, _, classID, subclassID = C_Item.GetItemInfoInstant(id)
     if classID ~= 0 then return {}, classID ~= nil end
     local spell = C_Item.GetItemSpell(id)
-    local complete = true
+    -- An item the client has not loaded yet reports no spell: water would pass as food.
+    local complete = spell ~= nil or not C_Item.IsItemDataCachedByID or C_Item.IsItemDataCachedByID(id)
     if spell then
         local n
         n, complete = Names()
