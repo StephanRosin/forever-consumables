@@ -57,6 +57,19 @@ local function paintToggle()
     Bar.toggle.icon:SetTexture(collapsed() and TOGGLE_CLOSED or TOGGLE_OPEN)
 end
 
+-- Optional Masque skinning. A button joins the group the first time it is sized,
+-- because Masque scales its skin from the button's size. Count stays ours (false
+-- keeps Masque off it), so the count options keep working. Never runs in combat.
+local function applySkin(b, size)
+    if not Bar.skins or b.skinnedSize == size then return end
+    if b.skinnedSize then
+        Bar.skins:ReSkin(b)
+    else
+        Bar.skins:AddButton(b, { Icon = b.icon, Cooldown = b.cooldown, Count = false }, "Item")
+    end
+    b.skinnedSize = size
+end
+
 local function newButton(cat)
     local b = CreateFrame("Button", "ForeverConsumablesButton_" .. cat, Bar.bar, "SecureActionButtonTemplate")
     b.cat = cat
@@ -87,6 +100,8 @@ end
 
 function Bar.Create()
     if Bar.holder then return end
+    local Masque = LibStub and LibStub("Masque", true)
+    Bar.skins = Masque and Masque:Group("Forever Consumables")   -- fixed name: Masque saves the skin under it
     local holder = CreateFrame("Frame", "ForeverConsumablesHolder", UIParent, "SecureHandlerStateTemplate")
     holder:SetMovable(true)
     holder:SetClampedToScreen(true)
@@ -276,6 +291,7 @@ function Bar.Refresh()
         b:SetAttribute("item", b.entry and ("item:" .. b.entry.id) or nil)
         b:SetAttribute("*type2", arrowMode == "RIGHTCLICK" and "" or nil)
         b:SetSize(size, size)
+        applySkin(b, size)
         b:ClearAllPoints()
         b:SetPoint("TOPLEFT", Bar.bar, "TOPLEFT", g.cells[i].x, g.cells[i].y)
         b:Show()

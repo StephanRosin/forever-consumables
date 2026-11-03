@@ -11,6 +11,7 @@
 ## AddonCompartmentFunc: ForeverConsumables_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: ForeverConsumables_OnAddonCompartmentEnter
 ## AddonCompartmentFuncOnLeave: ForeverConsumables_OnAddonCompartmentLeave
+## OptionalDeps: Masque
 ## SavedVariables: ForeverConsumablesProfiles
 ## SavedVariablesPerCharacter: ForeverConsumablesChar
 

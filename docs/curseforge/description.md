@@ -43,6 +43,7 @@ A consumables bar for **WoW: Forever**. One button per category shows the item i
 - **Unlock and drag** it anywhere, or set point and X/Y exactly.
 - The count: font (LibSharedMedia fonts too), size, outline, colour and its place on the button.
 - Switch each category on or off and set its **place on the bar**.
+- **Masque** support (optional): skin the buttons under Masque's group "Forever Consumables". The count keeps its own settings.
 
 ## Options and profiles
 - Its own options window in the style of Forever Unit Frames, opened with `/fcon`, the minimap button or Blizzard's addon compartment.
