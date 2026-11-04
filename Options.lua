@@ -120,6 +120,8 @@ local function displayTab()
         { type = "header", label = "OPT_CHOOSING" },
         select("arrowMode", "OPT_ARROW", "ARROW_"),
         check("tooltip", "OPT_TOOLTIP"),
+        check("autoWorst", "OPT_AUTO_WORST"),
+        check("conjuredFirst", "OPT_CONJURED_FIRST"),
     }
 end
 

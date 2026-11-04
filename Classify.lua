@@ -37,7 +37,9 @@ local function Names()
     return found, complete
 end
 
-function Classify.Reset() names, cache = nil, {} end
+local conjured = {}
+
+function Classify.Reset() names, cache, conjured = nil, {}, {} end
 
 local BY_SPELL = {
     { "refreshment", { "food", "drink" } },
@@ -78,7 +80,20 @@ function Classify.Of(id)
     return copy(cats)
 end
 
-function Classify.IsConjured(id) return Items.CONJURED[id] == true end
+-- Listed, or its tooltip says "Conjured Item": Forever adds items no list knows.
+-- A sell price of 0 would not do, unsellable quest and event food has that too.
+function Classify.IsConjured(id)
+    if Items.CONJURED[id] then return true end
+    if conjured[id] ~= nil then return conjured[id] end
+    local tooltip = C_TooltipInfo and C_TooltipInfo.GetItemByID(id)
+    local found = false
+    for _, line in ipairs(tooltip and tooltip.lines or {}) do
+        if line.leftText == ITEM_CONJURED then found = true end
+    end
+    -- An item the client has not loaded yet has an empty tooltip: ask again.
+    if C_Item.IsItemDataCachedByID(id) then conjured[id] = found end
+    return found
+end
 
 -- Listed, or its use spell's text names the "Well Fed" buff.
 function Classify.IsBuffFood(id)

@@ -28,7 +28,7 @@ function Picker.Open(owner, cat)
     end
     MenuUtil.CreateContextMenu(owner, function(_, root)
         root:CreateTitle(catLabel(cat))
-        root:CreateRadio(L.PICK_AUTO, function() return chosenHere() == nil end, function() choose(cat, nil) end)
+        root:CreateRadio(S.Get("autoWorst") and L.PICK_AUTO_WORST or L.PICK_AUTO, function() return chosenHere() == nil end, function() choose(cat, nil) end)
         for _, e in ipairs(list) do
             local text = ("|T%s:16|t %s (%d)"):format(tostring(e.icon), e.name, C_Item.GetItemCount(e.id) or 0)
             root:CreateRadio(text, function() return chosenHere() == e.id end, function() choose(cat, e.id) end)

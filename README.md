@@ -8,7 +8,8 @@ categories are hidden. The bar can always be collapsed to a small button, also i
 Everything is configurable in the options window (`/fcon`, the minimap button or the addon compartment):
 direction, buttons per row, size, spacing, scale, border and background, position and lock, when the bar shows
 (always, in or out of combat, only in instances or groups, hidden while dead or on a taxi), opacity in and out
-of combat, the count's font and place, which categories show and in which order, profiles with export and
+of combat, the count's font and place, whether the automatic choice takes the worst item first and conjured
+items always first, which categories show and in which order, profiles with export and
 import. English, German, Spanish and French. If you use Masque, the buttons follow your skin (optional).
 
 ## How items are sorted

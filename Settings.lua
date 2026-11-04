@@ -49,6 +49,8 @@ local DEFS = {
     { key = "countY", type = "int", min = -30, max = 30, default = 2 },
     { key = "arrowMode", type = "enum", values = { "RIGHT", "BELOW", "RIGHTCLICK" }, default = "RIGHTCLICK" },
     { key = "tooltip", type = "bool", default = true },
+    { key = "autoWorst", type = "bool", default = false },
+    { key = "conjuredFirst", type = "bool", default = true },
     -- Categories
     { key = "hideEmpty", type = "bool", default = true },
     { key = "order", type = "text", default = table.concat(Settings.CATEGORIES, ",") },

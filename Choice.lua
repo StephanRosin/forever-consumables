@@ -2,7 +2,9 @@
 Choice.lua -- which item a category's button uses. By hand (stored per
 character) while that item is in the bags, otherwise the best one: usable at
 your level, conjured first, then the higher required level, then the higher
-item level. Buff food is never chosen automatically.
+item level. Two settings change this: "conjuredFirst" off lets conjured items
+compete by level alone, "autoWorst" takes the lowest level instead of the
+highest. Buff food is never chosen automatically.
 -----------------------------------------------------------------------------]]
 
 local ADDON, ns = ...
@@ -10,14 +12,19 @@ local ADDON, ns = ...
 local Choice = {}
 ns.Choice = Choice
 
-local function better(a, b)
-    if a.conjured ~= b.conjured then return a.conjured end
+local function higher(a, b)
     if a.minLevel ~= b.minLevel then return a.minLevel > b.minLevel end
     if a.itemLevel ~= b.itemLevel then return a.itemLevel > b.itemLevel end
     return a.id > b.id
 end
 
 function Choice.Best(list, level)
+    local conjuredFirst, worst = ns.Settings.Get("conjuredFirst"), ns.Settings.Get("autoWorst")
+    local function better(a, b)
+        if conjuredFirst and a.conjured ~= b.conjured then return a.conjured end
+        if worst then return higher(b, a) end
+        return higher(a, b)
+    end
     local best
     for _, e in ipairs(list) do
         if not e.buffFood and (e.minLevel or 0) <= level and (not best or better(e, best)) then best = e end

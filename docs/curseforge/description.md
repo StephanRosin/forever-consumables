@@ -17,6 +17,7 @@ A consumables bar for **WoW: Forever**. One button per category shows the item i
 ## Choose the item
 - A **right click** on a button lists every item of that category in your bags, with its count. Pick one, and the button uses it from now on.
 - Or leave it on **"Automatic (best)"**: the best item you can use at your level is taken: conjured food, water, mana gems and healthstones first (they vanish otherwise), then the highest level. Buff food is never eaten automatically, only when you choose it.
+- Two options change the automatic choice: **use the worst item first**, and **always use conjured items first** (on by default; turn it off and mage water competes by level like any other drink).
 - Run out of your chosen item and the button falls back to the best one; restock and your choice is back.
 - Prefer a **small arrow** beside or below each button to open the list? One setting.
 

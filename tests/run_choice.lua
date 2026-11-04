@@ -33,6 +33,36 @@ M.check("conjured first", C.Best(scan.drink, 60).id, 8079)
 M.check("buff food never automatic", C.Best(scan.food, 60).id, 4599)
 M.check("only buff food: none", C.Best({ scan.food[2] }, 60), nil)
 
+-- The two options of the automatic choice. 8766 is the lower, unconjured drink.
+ns.Settings.Set("autoWorst", true)
+M.check("worst: lowest level", C.Best(scan.healing, 60).id, 118)
+M.check("worst: conjured still first", C.Best(scan.drink, 60).id, 8079)
+M.check("worst: never too high a level", C.Best(scan.healing, 1).id, 118)
+M.check("worst: buff food never automatic", C.Best(scan.food, 60).id, 4599)
+ns.Settings.Set("conjuredFirst", false)
+M.check("worst, conjured not first", C.Best(scan.drink, 60).id, 8766)
+ns.Settings.Set("autoWorst", false)
+local lowConjured = { { id = 1, conjured = true, minLevel = 5, itemLevel = 5 }, { id = 2, conjured = false, minLevel = 50, itemLevel = 50 } }
+M.check("best, conjured not first", C.Best(lowConjured, 60).id, 2)
+ns.Settings.Set("conjuredFirst", true)
+M.check("best, conjured first even when lower", C.Best(lowConjured, 60).id, 1)
+
+-- Conjured by tooltip: Forever's own items stand in no list.
+ITEM_CONJURED = "Conjured Item"
+local tooltipCalls = 0
+C_TooltipInfo = { GetItemByID = function(id)
+    tooltipCalls = tooltipCalls + 1
+    return { lines = { { leftText = "Item" }, { leftText = id == 4599 and ITEM_CONJURED or "Other" } } }
+end }
+ns.Classify.Reset()
+M.check("tooltip: conjured", ns.Classify.IsConjured(4599), true)
+M.check("tooltip: not conjured", ns.Classify.IsConjured(8766), false)
+M.check("list needs no tooltip", ns.Classify.IsConjured(8079), true)
+ns.Classify.IsConjured(4599)
+M.check("tooltip asked once per item", tooltipCalls, 2)
+C_TooltipInfo = nil
+ns.Classify.Reset()
+
 -- A chosen item while in the bags; automatic otherwise.
 local e, chosen = C.Resolve(scan.healing, 118, 60)
 M.check("chosen used", e.id, 118)
