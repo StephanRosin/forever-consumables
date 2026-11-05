@@ -1,10 +1,10 @@
 ## Interface: 16001
 ## Title: Forever Consumables
-## Notes: A small bar for food, drink, potions, flasks, elixirs, scrolls and bandages.
-## Notes-deDE: Eine kleine Leiste für Essen, Trinken, Tränke, Fläschchen, Elixiere, Schriftrollen und Verbände.
-## Notes-esES: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos y vendas.
-## Notes-esMX: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos y vendas.
-## Notes-frFR: Une petite barre pour nourriture, boissons, potions, flacons, élixirs, parchemins et bandages.
+## Notes: A small bar for food, drink, potions, flasks, elixirs, scrolls, bandages and weapon oils.
+## Notes-deDE: Eine kleine Leiste für Essen, Trinken, Tränke, Fläschchen, Elixiere, Schriftrollen, Verbände und Waffenöle.
+## Notes-esES: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos, vendas y aceites de arma.
+## Notes-esMX: Una pequeña barra para comida, bebida, pociones, frascos, elixires, pergaminos, vendas y aceites de arma.
+## Notes-frFR: Une petite barre pour nourriture, boissons, potions, flacons, élixirs, parchemins, bandages et huiles d'arme.
 ## Version: 1.0.7
 ## X-Curse-Project-ID: 1736889
 ## IconTexture: Interface\Icons\INV_Potion_54

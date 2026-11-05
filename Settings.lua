@@ -11,7 +11,7 @@ local Settings = {}
 ns.Settings = Settings
 
 Settings.CATEGORIES = { "food", "drink", "healing", "healthstone", "mana", "potions", "flasks", "elixirs", "protection",
-    "scrolls", "bandages" }
+    "scrolls", "bandages", "weapon" }
 Settings.POINTS = { "TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "CENTER", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT" }
 
 local DEFS = {

@@ -37,6 +37,10 @@ M.Click(heal, "LeftButton", false)
 M.check("left click uses once", #M.used, 1)
 M.check("used the potion", M.used[1], "item:13446")
 
+M.check("weapon: main hand", Bar.ButtonOf("weapon"):GetAttribute("target-slot"), 16)
+M.check("weapon: off hand with shift", Bar.ButtonOf("weapon"):GetAttribute("shift-target-slot"), 17)
+M.check("other buttons have no target", Bar.ButtonOf("flasks"):GetAttribute("target-slot"), nil)
+
 -- Empty categories kept when asked.
 S.Set("hideEmpty", false)
 M.check("empty flasks kept", shown("flasks"), true)

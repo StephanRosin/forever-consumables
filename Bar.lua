@@ -22,7 +22,9 @@ Bar.ICONS = {
     potions = "Interface\\Icons\\INV_Potion_41", flasks = "Interface\\Icons\\INV_Potion_62",
     elixirs = "Interface\\Icons\\INV_Potion_32", protection = "Interface\\Icons\\INV_Potion_16",
     scrolls = "Interface\\Icons\\INV_Scroll_03", bandages = "Interface\\Icons\\INV_Misc_Bandage_15",
+    weapon = "Interface\\Icons\\INV_Stone_SharpeningStone_01",
 }
+local MAIN_HAND_SLOT, OFF_HAND_SLOT = 16, 17
 local TOGGLE_OPEN = "Interface\\Buttons\\UI-MinusButton-Up"
 local TOGGLE_CLOSED = "Interface\\Buttons\\UI-PlusButton-Up"
 local ARROW_ATLAS = { RIGHT = "friendslist-categorybutton-arrow-right", BELOW = "friendslist-categorybutton-arrow-down" }
@@ -75,6 +77,11 @@ local function newButton(cat)
     b.cat = cat
     b:RegisterForClicks("AnyUp", "AnyDown")
     b:SetAttribute("type", "item")
+    if cat == "weapon" then
+        -- Oils and stones ask for a target: the template answers with this slot.
+        b:SetAttribute("target-slot", MAIN_HAND_SLOT)
+        b:SetAttribute("shift-target-slot", OFF_HAND_SLOT)
+    end
     b.icon = b:CreateTexture(nil, "ARTWORK")
     b.icon:SetAllPoints(b)
     b.icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
