@@ -1,0 +1,14 @@
+<Bindings>
+    <Binding name="CLICK ForeverConsumablesButton_food:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_drink:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_healing:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_healthstone:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_mana:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_potions:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_flasks:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_elixirs:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_protection:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_scrolls:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_bandages:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_weapon:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+</Bindings>

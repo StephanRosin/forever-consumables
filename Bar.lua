@@ -427,3 +427,13 @@ function Bar.DebugLine()
 end
 
 ns.Slash.debug = function() ns.Print(Bar.DebugLine()) end
+
+-- The names in the game's key bindings for Bindings.xml, which the client loads by itself.
+local function labelBindings()
+    BINDING_HEADER_FOREVERCONSUMABLES = L.ADDON_NAME
+    for _, cat in ipairs(S.CATEGORIES) do
+        _G["BINDING_NAME_CLICK ForeverConsumablesButton_" .. cat .. ":LeftButton"] = L["CAT_" .. cat:upper()]
+    end
+end
+labelBindings()
+ns.Locale.OnChange(labelBindings)

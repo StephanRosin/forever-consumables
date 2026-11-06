@@ -13,6 +13,7 @@ A consumables bar for **WoW: Forever**. One button per category shows the item i
 - The button shows the item's icon, the **count over all your bags** and its **cooldown** (the shared potion cooldown too).
 - **Left click uses it.** Works in combat like any action button.
 - **Weapon oils and stones** go on your main hand with a click, on your off hand with a shift-click, no cursor targeting.
+- **A key for every category**: set it in the game's key bindings, section "Forever Consumables". For the off hand of weapon oils, bind Shift plus a key as well.
 - **Empty categories are hidden**, so the bar only ever shows what you can actually use. Or keep them, greyed, if you prefer a fixed layout.
 
 ## Choose the item

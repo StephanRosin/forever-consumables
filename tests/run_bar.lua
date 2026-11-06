@@ -224,4 +224,18 @@ M.check("debug skips disabled", line:find("flasks=", 1, true), nil)
 SlashCmdList.FOREVERCONSUMABLES("debug")
 M.check("debug prints", M.chat[#M.chat]:find("FC holder=", 1, true) ~= nil, true)
 
+-- Key bindings: Bindings.xml names exactly the real buttons, each with a label.
+local bound = {}
+for cat in io.open(ADDONDIR .. "/Bindings.xml"):read("*a"):gmatch('name="CLICK ForeverConsumablesButton_(%w+):LeftButton"') do
+    bound[#bound + 1] = cat
+end
+M.check("a binding per category, in order", table.concat(bound, ","), table.concat(S.CATEGORIES, ","))
+for _, cat in ipairs(bound) do
+    M.check("binding hits a button: " .. cat, _G["ForeverConsumablesButton_" .. cat] ~= nil or Bar.ButtonOf(cat):GetName() == "ForeverConsumablesButton_" .. cat, true)
+end
+M.check("binding header", BINDING_HEADER_FOREVERCONSUMABLES, "Forever Consumables")
+M.check("binding label", _G["BINDING_NAME_CLICK ForeverConsumablesButton_food:LeftButton"], "Food")
+ns.Locale.Set("deDE")
+M.check("binding label follows the language", _G["BINDING_NAME_CLICK ForeverConsumablesButton_food:LeftButton"], ns.Locales.deDE.CAT_FOOD)
+
 M.done()

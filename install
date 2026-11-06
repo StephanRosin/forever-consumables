@@ -8,8 +8,9 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 TARGET="$DEST/ForeverConsumables"
 rm -rf "$TARGET"
 mkdir -p "$TARGET"
-# Files listed in the TOC plus the TOC itself; nothing else ships.
-cp "$HERE/ForeverConsumables.toc" "$TARGET/"
+# Files listed in the TOC plus the TOC itself and Bindings.xml, which the
+# client loads without a TOC entry; nothing else ships.
+cp "$HERE/ForeverConsumables.toc" "$HERE/Bindings.xml" "$TARGET/"
 grep -v '^\s*#' "$HERE/ForeverConsumables.toc" | grep -v '^\s*$' | tr -d '\r' | while read -r f; do
     f="${f//\\//}"
     mkdir -p "$TARGET/$(dirname "$f")"
