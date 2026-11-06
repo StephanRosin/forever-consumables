@@ -67,7 +67,7 @@ local function applySkin(b, size)
     if b.skinnedSize then
         Bar.skins:ReSkin(b)
     else
-        Bar.skins:AddButton(b, { Icon = b.icon, Cooldown = b.cooldown, Count = false }, "Item")
+        Bar.skins:AddButton(b, { Icon = b.icon, Cooldown = b.cooldown, Count = false, HotKey = false }, "Item")
     end
     b.skinnedSize = size
 end
@@ -88,6 +88,11 @@ local function newButton(cat)
     b.cooldown = CreateFrame("Cooldown", nil, b, "CooldownFrameTemplate")
     b.cooldown:SetAllPoints(b)
     b.count = b:CreateFontString(nil, "OVERLAY")
+    b.hotkey = b:CreateFontString(nil, "OVERLAY")
+    b.hotkey:SetPoint("TOPLEFT", b, "TOPLEFT", 2, -2)
+    b.hotkey:SetPoint("TOPRIGHT", b, "TOPRIGHT", -2, -2)
+    b.hotkey:SetJustifyH("RIGHT")
+    b.hotkey:SetWordWrap(false)
     b.arrow = CreateFrame("Button", nil, Bar.bar)
     b.arrow.icon = b.arrow:CreateTexture(nil, "ARTWORK")
     b.arrow.icon:SetSize(ARROW_ICON, ARROW_ICON)
@@ -221,6 +226,18 @@ local function applyCountFont(b)
     b.count:ClearAllPoints()
     local p = S.Get("countPoint")
     b.count:SetPoint(p, b, p, S.Get("countX"), S.Get("countY"))
+    b.hotkey:SetFont(ns.Media.FontPath(S.Get("countFont")), S.Get("countSize"), flags == "NONE" and "" or flags)
+end
+
+-- Only shown buttons: a font string that has no font yet refuses text.
+local function updateHotkeys()
+    local show = S.Get("showKeybind")
+    for _, b in pairs(buttons) do
+        if b:IsShown() then
+            local key = show and GetBindingKey("CLICK " .. b:GetName() .. ":LeftButton")
+            b.hotkey:SetText(key and GetBindingText(key, 1) or "")
+        end
+    end
 end
 
 function Bar.ApplyVisibility()
@@ -337,6 +354,7 @@ function Bar.Refresh()
     paintToggle()
     applyBorder()
     Bar.mover:SetShown(not S.Get("locked"))
+    updateHotkeys()
     Bar.UpdateDisplay()
     Bar.ApplyAlpha()
 end
@@ -371,6 +389,7 @@ end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
 ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
+ns.On("UPDATE_BINDINGS", updateHotkeys)
 ns.On("PLAYER_REGEN_DISABLED", function()
     inCombat = true
     Bar.UpdateDisplay()

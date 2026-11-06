@@ -238,4 +238,21 @@ M.check("binding label", _G["BINDING_NAME_CLICK ForeverConsumablesButton_food:Le
 ns.Locale.Set("deDE")
 M.check("binding label follows the language", _G["BINDING_NAME_CLICK ForeverConsumablesButton_food:LeftButton"], ns.Locales.deDE.CAT_FOOD)
 
+-- The bound key on the button, also when bound during combat.
+local foodButton = Bar.ButtonOf("food")
+M.check("no key, no text", foodButton.hotkey:GetText(), "")
+M.bindings["CLICK ForeverConsumablesButton_food:LeftButton"] = "SHIFT-Q"
+M.setCombat(true)
+M.Fire("UPDATE_BINDINGS")
+M.check("bound key, shortened", foodButton.hotkey:GetText(), "s-Q")
+M.setCombat(false)
+M.check("other buttons stay empty", heal.hotkey:GetText(), "")
+S.Set("showKeybind", false)
+M.check("key switched off", foodButton.hotkey:GetText(), "")
+S.Set("showKeybind", true)
+M.check("key switched on", foodButton.hotkey:GetText(), "s-Q")
+M.bindings["CLICK ForeverConsumablesButton_food:LeftButton"] = nil
+M.Fire("UPDATE_BINDINGS")
+M.check("unbound again", foodButton.hotkey:GetText(), "")
+
 M.done()

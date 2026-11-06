@@ -193,6 +193,9 @@ function UnregisterStateDriver(f, state) if M.drivers[f] then M.drivers[f][state
 
 function IsModifierKeyDown() return M.modifier or false end
 function GetLocale() return M.locale or "enUS" end
+M.bindings = {}
+function GetBindingKey(action) return M.bindings[action] end
+function GetBindingText(key, abbreviate) return abbreviate and (key:gsub("SHIFT%-", "s-")) or key end
 function UnitLevel() return M.level end
 function UnitClass() return "Priest", M.class or "PRIEST" end
 function UnitOnTaxi() return M.taxi end
