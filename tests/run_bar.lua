@@ -41,6 +41,20 @@ M.check("weapon: main hand", Bar.ButtonOf("weapon"):GetAttribute("target-slot"),
 M.check("weapon: off hand with shift", Bar.ButtonOf("weapon"):GetAttribute("shift-target-slot"), 17)
 M.check("other buttons have no target", Bar.ButtonOf("flasks"):GetAttribute("target-slot"), nil)
 
+-- A known spell (Cannibalize) casts, no item, no count; unknown it stays hidden.
+M.check("other hidden without the spell", shown("other"), false)
+M.known, M.spells[20577] = { [20577] = true }, "Cannibalize"
+Bar.Refresh()
+local other = Bar.ButtonOf("other")
+M.check("other shown with the spell", shown("other"), true)
+M.check("spell type", other:GetAttribute("type"), "spell")
+M.check("spell attribute", other:GetAttribute("spell"), 20577)
+M.check("no item attribute", other:GetAttribute("item"), nil)
+M.check("spell without count", other.count:GetText(), "")
+M.check("items keep type item", heal:GetAttribute("type"), "item")
+M.known, M.spells[20577] = nil, nil
+Bar.Refresh()
+
 -- Empty categories kept when asked.
 S.Set("hideEmpty", false)
 M.check("empty flasks kept", shown("flasks"), true)
@@ -217,7 +231,7 @@ M.Fire("BAG_UPDATE_DELAYED")
 S.Set("show_drink", true)
 S.Set("show_flasks", false)
 local line = Bar.DebugLine()
-M.check("debug line short", #line < 200, true)
+M.check("debug line fits one chat line", #line < 255, true)
 M.check("debug line format", line:match("^FC holder=%a+ alpha=%S+ bar=%a+ items=%d+ collapsed=%a+ driver=.+ food=%d") ~= nil, true)
 M.check("debug line counts", line:match("food=1 drink=1 healing=1") ~= nil, true)
 M.check("debug skips disabled", line:find("flasks=", 1, true), nil)

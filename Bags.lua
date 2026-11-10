@@ -1,7 +1,7 @@
 --[[---------------------------------------------------------------------------
 Bags.lua -- the consumables in the bags, per category. One entry per item
 ID with its total count over all bags; an item of two categories stands in
-both lists.
+both lists. Known spells of Items.SPELLS join their category (no count).
 -----------------------------------------------------------------------------]]
 
 local ADDON, ns = ...
@@ -37,6 +37,14 @@ function Bags.Scan()
                     local entry = newEntry(id, info)
                     for _, cat in ipairs(cats) do table.insert(byCat[cat], entry) end
                 end
+            end
+        end
+    end
+    for cat, ids in pairs(ns.Items.SPELLS) do
+        for _, id in ipairs(ids) do
+            if C_SpellBook.IsSpellKnown(id) then
+                table.insert(byCat[cat], { id = id, spell = true, name = C_Spell.GetSpellName(id) or ("spell:" .. id),
+                    icon = C_Spell.GetSpellTexture(id), minLevel = 0, itemLevel = 0 })
             end
         end
     end

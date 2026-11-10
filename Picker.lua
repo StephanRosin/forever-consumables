@@ -30,7 +30,8 @@ function Picker.Open(owner, cat)
         root:CreateTitle(catLabel(cat))
         root:CreateRadio(S.Get("autoWorst") and L.PICK_AUTO_WORST or L.PICK_AUTO, function() return chosenHere() == nil end, function() choose(cat, nil) end)
         for _, e in ipairs(list) do
-            local text = ("|T%s:16|t %s (%d)"):format(tostring(e.icon), e.name, C_Item.GetItemCount(e.id) or 0)
+            local text = e.spell and ("|T%s:16|t %s"):format(tostring(e.icon), e.name)
+                or ("|T%s:16|t %s (%d)"):format(tostring(e.icon), e.name, C_Item.GetItemCount(e.id) or 0)
             root:CreateRadio(text, function() return chosenHere() == e.id end, function() choose(cat, e.id) end)
         end
     end)
@@ -39,7 +40,9 @@ end
 function Picker.Tooltip(button)
     if not S.Get("tooltip") then return end
     GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-    if button.entry then
+    if button.entry and button.entry.spell then
+        GameTooltip:SetSpellByID(button.entry.id)
+    elseif button.entry then
         GameTooltip:SetItemByID(button.entry.id)
     else
         GameTooltip:SetText(catLabel(button.cat))

@@ -25,6 +25,16 @@ M.check("count", scan.food[1].count, 10)
 M.check("conjured flag", scan.drink[1].conjured, true)
 M.check("buff food flag", scan.food[2].buffFood, true)
 
+M.check("hearthstone own category", #scan.hearthstone, 0)
+M.check("unknown spell not listed", #scan.other, 0)
+M.known, M.spells[20577] = { [20577] = true }, "Cannibalize"
+M.items[6948], M.bags[6948] = { name = "Hearthstone", classID = 15, icon = 9 }, 1
+scan = B.Scan()
+M.check("hearthstone listed", scan.hearthstone[1] and scan.hearthstone[1].id, 6948)
+M.check("known spell in other", scan.other[1] and scan.other[1].name, "Cannibalize")
+M.check("spell entry flagged", scan.other[1].spell, true)
+M.check("spell chosen automatically", C.Best(scan.other, 30).id, 20577)
+M.known, M.spells[20577], M.items[6948], M.bags[6948] = nil, nil, nil, nil
 M.check("best: highest usable level", C.Best(scan.healing, 30).id, 929)
 M.level = 60
 scan = B.Scan()

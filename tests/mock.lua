@@ -252,9 +252,16 @@ C_Item = {
     GetItemCount = function(id) return M.bags[id] or 0 end,
     RequestLoadItemDataByID = function() end,
 }
+-- Spells the character knows: M.known[id] = true.
+C_SpellBook = { IsSpellKnown = function(id) return M.known and M.known[id] == true end }
 -- Spell names by ID in the client's language (M.spells[id] = name).
 C_Spell = {
     GetSpellName = function(id) return M.spells[id] end,
+    GetSpellTexture = function(id) return M.spells[id] and 900 + id or nil end,
+    GetSpellCooldown = function(id)
+        local c = M.cooldowns["spell" .. id]
+        return { startTime = c and c[1] or 0, duration = c and c[2] or 0, isEnabled = true, modRate = 1 }
+    end,
     GetSpellDescription = function(id)
         for _, it in pairs(M.items) do if it.spellID == id then return it.desc or "" end end
         return ""

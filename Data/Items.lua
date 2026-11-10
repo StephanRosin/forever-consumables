@@ -56,6 +56,7 @@ Items.LISTS = {
         1181, 1712, 4424, 10306, 1180, 1711, 4422, 10307, 954, 2289, 4426, 10310,
     },
     bandages = { 1251, 2581, 3530, 3531, 6450, 6451, 8544, 8545, 14529, 14530 },
+    hearthstone = { 6948 },
     -- shortcut: IDs only, Forever's own oils and stones stay out; add them when reported.
     weapon = {
         2862, 2863, 2871, 7964, 12404, 18262, 23122, 23528, 23529, -- Sharpening stones: Rough .. Elemental, Consecrated, Fel, Adamantite
@@ -64,6 +65,11 @@ Items.LISTS = {
         20745, 20747, 20748, 22521,                  -- Mana oils: Minor, Lesser, Brilliant, Superior
         3824, 3829,                                  -- Shadow Oil, Frost Oil
     },
+}
+
+-- Spells with a button of their own, shown only when the character knows them.
+Items.SPELLS = {
+    other = { 20577 },                              -- Cannibalize (Undead)
 }
 
 -- Conjured items go first: they vanish when you log out long enough.

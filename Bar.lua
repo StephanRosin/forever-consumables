@@ -23,6 +23,7 @@ Bar.ICONS = {
     elixirs = "Interface\\Icons\\INV_Potion_32", protection = "Interface\\Icons\\INV_Potion_16",
     scrolls = "Interface\\Icons\\INV_Scroll_03", bandages = "Interface\\Icons\\INV_Misc_Bandage_15",
     weapon = "Interface\\Icons\\INV_Stone_SharpeningStone_01",
+    hearthstone = "Interface\\Icons\\INV_Misc_Rune_01", other = "Interface\\Icons\\INV_Misc_QuestionMark",
 }
 local MAIN_HAND_SLOT, OFF_HAND_SLOT = 16, 17
 local TOGGLE_OPEN = "Interface\\Buttons\\UI-MinusButton-Up"
@@ -263,7 +264,13 @@ function Bar.UpdateDisplay()
     for cat, b in pairs(buttons) do
         if b:IsShown() then
             local e = b.entry
-            if e then
+            if e and e.spell then
+                b.icon:SetTexture(e.icon)
+                b.icon:SetDesaturated(false)
+                b.count:SetText("")
+                local cd = C_Spell.GetSpellCooldown(e.id)
+                if cd and cd.duration > 0 then b.cooldown:SetCooldown(cd.startTime, cd.duration) else b.cooldown:Clear() end
+            elseif e then
                 local count = C_Item.GetItemCount(e.id) or 0
                 b.icon:SetTexture(e.icon)
                 b.icon:SetDesaturated(count == 0 or (combat and NOT_IN_COMBAT[cat] == true))
@@ -312,7 +319,10 @@ function Bar.Refresh()
         local b = buttons[cat]
         shownCat[cat] = true
         b.entry = ns.Choice.Resolve(lastScan[cat], ns.Choice.Get(cat), level)
-        b:SetAttribute("item", b.entry and ("item:" .. b.entry.id) or nil)
+        local e = b.entry
+        b:SetAttribute("type", e and e.spell and "spell" or "item")
+        b:SetAttribute("spell", e and e.spell and e.id or nil)
+        b:SetAttribute("item", e and not e.spell and ("item:" .. e.id) or nil)
         b:SetAttribute("*type2", arrowMode == "RIGHTCLICK" and "" or nil)
         b:SetSize(size, size)
         applySkin(b, size)
@@ -389,6 +399,7 @@ end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
 ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
+ns.On("SPELL_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
 ns.On("UPDATE_BINDINGS", updateHotkeys)
 ns.On("PLAYER_REGEN_DISABLED", function()
     inCombat = true
