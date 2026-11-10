@@ -24,6 +24,8 @@ Items.LISTS = {
         11952,                                      -- Night Dragon's Breath (Felwood)
         20520, 12662,                               -- Dark Rune, Demonic Rune
         18253, 9144,
+        -- shortcut: health+mana potions only by ID, new (crafted) ones need an entry here.
+        274935,                                     -- Tessa's Tonic (Forever quest reward, health and mana)
     },
     potions = {
         5631, 5633, 13442,                          -- Rage, Great Rage, Mighty Rage Potion
