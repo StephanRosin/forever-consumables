@@ -52,6 +52,10 @@ M.check("spell attribute", other:GetAttribute("spell"), 20577)
 M.check("no item attribute", other:GetAttribute("item"), nil)
 M.check("spell without count", other.count:GetText(), "")
 M.check("items keep type item", heal:GetAttribute("type"), "item")
+M.check("spell without cooldown", other.cooldown._cooldown, nil)
+M.cooldowns.spell20577 = { 100, 120 }
+M.check("spell cooldown via duration object", pcall(Bar.UpdateDisplay) and other.cooldown._cooldown[2], 120)
+M.cooldowns.spell20577 = nil
 M.known, M.spells[20577] = nil, nil
 Bar.Refresh()
 

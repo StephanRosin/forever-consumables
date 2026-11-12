@@ -268,8 +268,9 @@ function Bar.UpdateDisplay()
                 b.icon:SetTexture(e.icon)
                 b.icon:SetDesaturated(false)
                 b.count:SetText("")
-                local cd = C_Spell.GetSpellCooldown(e.id)
-                if cd and cd.duration > 0 then b.cooldown:SetCooldown(cd.startTime, cd.duration) else b.cooldown:Clear() end
+                -- Spell cooldowns are secret in combat: only the duration object may reach the widget.
+                local dur = C_Spell.GetSpellCooldownDuration(e.id)
+                if dur then b.cooldown:SetCooldownFromDurationObject(dur) else b.cooldown:Clear() end
             elseif e then
                 local count = C_Item.GetItemCount(e.id) or 0
                 b.icon:SetTexture(e.icon)

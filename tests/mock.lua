@@ -122,6 +122,7 @@ local function newWidget(name, template)
         return fs
     end
     function w:SetCooldown(start, duration) self._cooldown = { start, duration } end
+    function w:SetCooldownFromDurationObject(d) self._cooldown = { d.start, d.duration } end
     function w:Clear() self._cooldown = nil end
     return w
 end
@@ -258,9 +259,11 @@ C_SpellBook = { IsSpellKnown = function(id) return M.known and M.known[id] == tr
 C_Spell = {
     GetSpellName = function(id) return M.spells[id] end,
     GetSpellTexture = function(id) return M.spells[id] and 900 + id or nil end,
-    GetSpellCooldown = function(id)
+    -- The client's numbers are secret in combat; a table makes any comparison on them throw.
+    GetSpellCooldown = function() return { startTime = {}, duration = {}, isEnabled = true, isActive = false, modRate = {} } end,
+    GetSpellCooldownDuration = function(id)
         local c = M.cooldowns["spell" .. id]
-        return { startTime = c and c[1] or 0, duration = c and c[2] or 0, isEnabled = true, modRate = 1 }
+        return c and { start = c[1], duration = c[2] } or nil
     end,
     GetSpellDescription = function(id)
         for _, it in pairs(M.items) do if it.spellID == id then return it.desc or "" end end
