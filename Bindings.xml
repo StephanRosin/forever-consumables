@@ -12,6 +12,9 @@
     <Binding name="CLICK ForeverConsumablesButton_scrolls:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_bandages:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_weapon:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_quest:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_trinket1:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_trinket2:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_hearthstone:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_other:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
 </Bindings>

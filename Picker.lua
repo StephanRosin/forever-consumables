@@ -19,9 +19,22 @@ local function choose(cat, id)
     Bar.Refresh()
 end
 
+-- A trinket slot: the worn trinket and those in the bags; picking one wears it there.
+local function openTrinkets(owner, cat, list)
+    local slot = ns.Bags.TRINKET_SLOTS[cat]
+    MenuUtil.CreateContextMenu(owner, function(_, root)
+        root:CreateTitle(catLabel(cat))
+        for _, e in ipairs(list) do
+            root:CreateRadio(("|T%s:16|t %s"):format(tostring(e.icon), e.name), function() return e.slot ~= nil end,
+                function() if not e.slot then C_Item.EquipItemByName(e.id, slot) end end)
+        end
+    end)
+end
+
 function Picker.Open(owner, cat)
     if InCombatLockdown() then return end
     local list = Bar.ListOf(cat)
+    if ns.Bags.TRINKET_SLOTS[cat] then return openTrinkets(owner, cat, list) end
     local function chosenHere()
         local id = Choice.Get(cat)
         for _, e in ipairs(list) do if e.id == id then return id end end

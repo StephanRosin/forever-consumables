@@ -65,6 +65,8 @@ Items.LISTS = {
         20745, 20747, 20748, 22521,                  -- Mana oils: Minor, Lesser, Brilliant, Superior
         3824, 3829,                                  -- Shadow Oil, Frost Oil
     },
+    -- shortcut: IDs from memory, not yet checked with /fcon ids; Engineering devices are no consumables.
+    other = { 7148, 18587 },                         -- Goblin Jumper Cables, Goblin Jumper Cables XL
 }
 
 -- Spells with a button of their own, shown only when the character knows them.

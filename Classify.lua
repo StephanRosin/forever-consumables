@@ -18,6 +18,7 @@ Classify.SPELLS = { food = 433, drink = 430, refreshment = 167152, healingPotion
 
 -- Retail-style consumable subclasses; Forever's data uses them (checked
 -- with /fcon scan: potions 1, food and drink 5).
+local QUEST_CLASS = 12   -- Enum.ItemClass.Questitem
 local SUBCLASS = { [1] = "potions", [2] = "elixirs", [3] = "flasks", [4] = "scrolls", [5] = "food", [7] = "bandages" }
 
 local names, cache = nil, {}
@@ -54,11 +55,14 @@ local function copy(t) local c = {} for i, v in ipairs(t) do c[i] = v end return
 
 local function compute(id)
     if Items.CATEGORY[id] then return copy(Items.CATEGORY[id]), true end
-    local _, _, _, _, _, classID, subclassID = C_Item.GetItemInfoInstant(id)
-    if classID ~= 0 then return {}, classID ~= nil end
+    local _, _, _, equipLoc, _, classID, subclassID = C_Item.GetItemInfoInstant(id)
     local spell = C_Item.GetItemSpell(id)
     -- An item the client has not loaded yet reports no spell: water would pass as food.
     local complete = spell ~= nil or not C_Item.IsItemDataCachedByID or C_Item.IsItemDataCachedByID(id)
+    -- Only quest items and trinkets with a use effect: the others have nothing to click.
+    if classID == QUEST_CLASS then return spell and { "quest" } or {}, complete end
+    if equipLoc == "INVTYPE_TRINKET" then return spell and { "trinket1", "trinket2" } or {}, complete end
+    if classID ~= 0 then return {}, classID ~= nil end
     if spell then
         local n
         n, complete = Names()

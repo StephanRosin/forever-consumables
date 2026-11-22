@@ -24,6 +24,8 @@ Bar.ICONS = {
     elixirs = "Interface\\Icons\\INV_Potion_32", protection = "Interface\\Icons\\INV_Potion_16",
     scrolls = "Interface\\Icons\\INV_Scroll_03", bandages = "Interface\\Icons\\INV_Misc_Bandage_15",
     weapon = "Interface\\Icons\\INV_Stone_SharpeningStone_01",
+    quest = "Interface\\Icons\\INV_Misc_Note_01",
+    trinket1 = "Interface\\Icons\\INV_Jewelry_Talisman_07", trinket2 = "Interface\\Icons\\INV_Jewelry_Talisman_07",
     hearthstone = "Interface\\Icons\\INV_Misc_Rune_01", other = "Interface\\Icons\\INV_Misc_QuestionMark",
 }
 local MAIN_HAND_SLOT, OFF_HAND_SLOT = 16, 17
@@ -273,10 +275,11 @@ function Bar.UpdateDisplay()
                 local dur = C_Spell.GetSpellCooldownDuration(e.id)
                 if dur then b.cooldown:SetCooldownFromDurationObject(dur) else b.cooldown:Clear() end
             elseif e then
-                local count = C_Item.GetItemCount(e.id) or 0
+                -- A worn trinket is not counted (GetItemCount skips equipped items) and needs no count.
+                local count = e.slot and 1 or C_Item.GetItemCount(e.id) or 0
                 b.icon:SetTexture(e.icon)
                 b.icon:SetDesaturated(count == 0 or (combat and NOT_IN_COMBAT[cat] == true))
-                b.count:SetText(tostring(count))
+                b.count:SetText(e.slot and "" or tostring(count))
                 local c = count == 0 and GREY or S.Get("countColor")
                 b.count:SetTextColor(c[1], c[2], c[3], c[4])
                 local start, duration = C_Container.GetItemCooldown(e.id)
@@ -320,11 +323,17 @@ function Bar.Refresh()
     for i, cat in ipairs(visible) do
         local b = buttons[cat]
         shownCat[cat] = true
-        b.entry = ns.Choice.Resolve(lastScan[cat], ns.Choice.Get(cat), level)
+        if ns.Bags.TRINKET_SLOTS[cat] then
+            -- A trinket button uses its slot; the picker swaps what is worn there.
+            local first = lastScan[cat][1]
+            b.entry = first and first.slot and first or nil
+        else
+            b.entry = ns.Choice.Resolve(lastScan[cat], ns.Choice.Get(cat), level)
+        end
         local e = b.entry
         b:SetAttribute("type", e and e.spell and "spell" or "item")
         b:SetAttribute("spell", e and e.spell and e.id or nil)
-        b:SetAttribute("item", e and not e.spell and ("item:" .. e.id) or nil)
+        b:SetAttribute("item", e and not e.spell and (e.slot and tostring(e.slot) or ("item:" .. e.id)) or nil)
         b:SetAttribute("*type2", arrowMode == "RIGHTCLICK" and "" or nil)
         b:SetSize(size, size)
         applySkin(b, size)
@@ -400,6 +409,7 @@ ns.On("SPELLS_CHANGED", function()
 end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
+ns.On("PLAYER_EQUIPMENT_CHANGED", function() Bar.Refresh() end)
 ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
 ns.On("SPELL_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)
 ns.On("UPDATE_BINDINGS", updateHotkeys)

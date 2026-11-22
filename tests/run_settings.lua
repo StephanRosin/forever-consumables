@@ -23,13 +23,13 @@ M.check("colour refused", S.Set("borderColor", { 1, 2 }), false)
 
 -- Order: default, moving, unknown and missing keys.
 M.check("default order", table.concat(S.Order(), ","),
-    "food,drink,conjured,healing,healthstone,mana,potions,flasks,elixirs,protection,scrolls,bandages,weapon,hearthstone,other")
+    "food,drink,conjured,healing,healthstone,mana,potions,flasks,elixirs,protection,scrolls,bandages,weapon,quest,trinket1,trinket2,hearthstone,other")
 S.MoveTo("bandages", 1)
 M.check("moved to front", S.Order()[1], "bandages")
 M.check("position", S.Position("food"), 2)
 ns.DB().order = "mana,junk,mana,food"
 M.check("cleaned order", table.concat(S.Order(), ","),
-    "mana,food,drink,conjured,healing,healthstone,potions,flasks,elixirs,protection,scrolls,bandages,weapon,hearthstone,other")
+    "mana,food,drink,conjured,healing,healthstone,potions,flasks,elixirs,protection,scrolls,bandages,weapon,quest,trinket1,trinket2,hearthstone,other")
 
 -- Export / import round trip.
 S.Set("visMode", "COMBAT")

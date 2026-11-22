@@ -11,7 +11,7 @@ local Settings = {}
 ns.Settings = Settings
 
 Settings.CATEGORIES = { "food", "drink", "conjured", "healing", "healthstone", "mana", "potions", "flasks", "elixirs", "protection",
-    "scrolls", "bandages", "weapon", "hearthstone", "other" }
+    "scrolls", "bandages", "weapon", "quest", "trinket1", "trinket2", "hearthstone", "other" }
 Settings.POINTS = { "TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "CENTER", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT" }
 
 local DEFS = {
@@ -61,7 +61,8 @@ local DEFS = {
 }
 for _, cat in ipairs(Settings.CATEGORIES) do
     -- Conjured food and water leave Food and Drink only once switched on: off for everyone already playing.
-    DEFS[#DEFS + 1] = { key = "show_" .. cat, type = "bool", default = cat ~= "conjured" }
+    -- The trinket slots are optional too.
+    DEFS[#DEFS + 1] = { key = "show_" .. cat, type = "bool", default = cat ~= "conjured" and not cat:find("^trinket") }
 end
 
 local byKey = {}

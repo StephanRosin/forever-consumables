@@ -9,6 +9,8 @@ local ADDON, ns = ...
 local Bags = {}
 ns.Bags = Bags
 
+Bags.TRINKET_SLOTS = { trinket1 = 13, trinket2 = 14 }   -- INVSLOT_TRINKET1/2
+
 local function newEntry(id, info)
     local name, _, _, itemLevel, minLevel = C_Item.GetItemInfo(id)
     return {
@@ -45,6 +47,15 @@ function Bags.Scan()
             end
         end
     end
+    -- The trinket worn in each slot heads its list; the bag ones can replace it.
+    for cat, slot in pairs(Bags.TRINKET_SLOTS) do
+        local id = GetInventoryItemID("player", slot)
+        if id and C_Item.GetItemSpell(id) then
+            local entry = newEntry(id, { iconFileID = GetInventoryItemTexture("player", slot) })
+            entry.slot = slot
+            table.insert(byCat[cat], 1, entry)
+        end
+    end
     for cat, ids in pairs(ns.Items.SPELLS) do
         for _, id in ipairs(ids) do
             if C_SpellBook.IsSpellKnown(id) then
@@ -54,7 +65,10 @@ function Bags.Scan()
         end
     end
     for _, list in pairs(byCat) do
-        table.sort(list, function(a, b) return a.name < b.name end)
+        table.sort(list, function(a, b)
+            if (a.slot ~= nil) ~= (b.slot ~= nil) then return a.slot ~= nil end
+            return a.name < b.name
+        end)
     end
     return byCat
 end

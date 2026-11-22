@@ -63,4 +63,29 @@ GameTooltip._item = nil
 heal:GetScript("OnEnter")(heal)
 M.check("tooltip off", GameTooltip._item, nil)
 
+-- Trinket slots: the worn one is used by slot, picking a bag one wears it.
+M.items[11] = { name = "Worn Trinket", equipLoc = "INVTYPE_TRINKET", classID = 4, spell = "Use", icon = 11 }
+M.items[12] = { name = "Bag Trinket", equipLoc = "INVTYPE_TRINKET", classID = 4, spell = "Use", icon = 12 }
+M.items[13] = { name = "Passive Trinket", equipLoc = "INVTYPE_TRINKET", classID = 4, icon = 13 }
+M.items[14] = { name = "Quest Rod", classID = 12, spell = "Use", icon = 14 }
+M.items[15] = { name = "Quest Letter", classID = 12, icon = 15 }
+M.worn[13], M.bags[12], M.bags[13], M.bags[14], M.bags[15] = 11, 1, 1, 1, 1
+S.Set("show_trinket1", true)
+Bar.Refresh()
+local t1 = Bar.ButtonOf("trinket1")
+M.check("trinket uses its slot", t1:GetAttribute("item"), "13")
+M.check("trinket2 off by default", Bar.ButtonOf("trinket2"):IsShown(), false)
+M.check("trinket list: worn + usable bag one", #Bar.ListOf("trinket1"), 2)
+M.check("worn trinket first", Bar.ListOf("trinket1")[1].id, 11)
+M.check("quest item with use", Bar.ListOf("quest")[1] and Bar.ListOf("quest")[1].id, 14)
+M.check("quest item without use left out", #Bar.ListOf("quest"), 1)
+t1.arrow:GetScript("OnClick")(t1.arrow)
+M.check("trinket menu: no automatic", #M.menu.root.children, 3)
+M.check("worn one selected", M.menu.root.children[2].isSelected(), true)
+M.menu.root.children[3].setSelected()
+M.Fire("PLAYER_EQUIPMENT_CHANGED", 13, true)
+M.check("picked trinket worn", M.worn[13], 12)
+M.check("button shows the new one", t1.entry.id, 12)
+M.check("worn trinket has no count", t1.count:GetText(), "")
+
 M.done()

@@ -237,7 +237,7 @@ C_Item = {
     GetItemInfoInstant = function(id)
         local it = M.items[id]
         if not it then return nil end
-        return id, "Consumable", "", "", it.icon, it.classID or 0, it.subclassID or 0
+        return id, "Consumable", "", it.equipLoc or "", it.icon, it.classID or 0, it.subclassID or 0
     end,
     GetItemInfo = function(id)
         local it = M.items[id]
@@ -252,7 +252,17 @@ C_Item = {
     IsItemDataCachedByID = function(id) local it = M.items[id] return it ~= nil and not it.uncached end,
     GetItemCount = function(id) return M.bags[id] or 0 end,
     RequestLoadItemDataByID = function() end,
+    -- Wears a bag item in slot; the one worn there goes to the bags.
+    EquipItemByName = function(id, slot)
+        local old = M.worn[slot]
+        M.worn[slot], M.bags[id] = id, nil
+        if old then M.bags[old] = 1 end
+    end,
 }
+-- Worn items: M.worn[slot] = id.
+M.worn = {}
+function GetInventoryItemID(_, slot) return M.worn[slot] end
+function GetInventoryItemTexture(_, slot) local it = M.items[M.worn[slot]] return it and it.icon end
 -- Spells the character knows: M.known[id] = true.
 C_SpellBook = { IsSpellKnown = function(id) return M.known and M.known[id] == true end }
 -- Spell names by ID in the client's language (M.spells[id] = name).
