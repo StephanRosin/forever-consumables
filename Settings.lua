@@ -10,7 +10,7 @@ local ADDON, ns = ...
 local Settings = {}
 ns.Settings = Settings
 
-Settings.CATEGORIES = { "food", "drink", "healing", "healthstone", "mana", "potions", "flasks", "elixirs", "protection",
+Settings.CATEGORIES = { "food", "drink", "conjured", "healing", "healthstone", "mana", "potions", "flasks", "elixirs", "protection",
     "scrolls", "bandages", "weapon", "hearthstone", "other" }
 Settings.POINTS = { "TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "CENTER", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT" }
 
@@ -60,7 +60,8 @@ local DEFS = {
     { key = "minimapAngle", type = "int", min = 0, max = 359, default = 225 },
 }
 for _, cat in ipairs(Settings.CATEGORIES) do
-    DEFS[#DEFS + 1] = { key = "show_" .. cat, type = "bool", default = true }
+    -- Conjured food and water leave Food and Drink only once switched on: off for everyone already playing.
+    DEFS[#DEFS + 1] = { key = "show_" .. cat, type = "bool", default = cat ~= "conjured" }
 end
 
 local byKey = {}

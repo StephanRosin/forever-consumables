@@ -25,6 +25,13 @@ M.check("count", scan.food[1].count, 10)
 M.check("conjured flag", scan.drink[1].conjured, true)
 M.check("buff food flag", scan.food[2].buffFood, true)
 
+M.check("conjured category off by default", #scan.conjured, 0)
+ns.Settings.Set("show_conjured", true)
+local own = B.Scan()
+M.check("conjured: in its own category", own.conjured[1] and own.conjured[1].id, 8079)
+M.check("conjured: no longer under drink", #own.drink, 1)
+ns.Settings.Set("show_conjured", false)
+
 M.check("hearthstone own category", #scan.hearthstone, 0)
 M.check("unknown spell not listed", #scan.other, 0)
 M.known, M.spells[20577] = { [20577] = true }, "Cannibalize"

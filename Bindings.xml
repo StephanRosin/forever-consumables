@@ -1,6 +1,7 @@
 <Bindings>
     <Binding name="CLICK ForeverConsumablesButton_food:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_drink:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
+    <Binding name="CLICK ForeverConsumablesButton_conjured:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_healing:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_healthstone:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>
     <Binding name="CLICK ForeverConsumablesButton_mana:LeftButton" category="BINDING_HEADER_FOREVERCONSUMABLES"/>

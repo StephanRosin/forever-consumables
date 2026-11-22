@@ -18,6 +18,7 @@ ns.Bar = Bar
 
 Bar.ICONS = {
     food = "Interface\\Icons\\INV_Misc_Food_14", drink = "Interface\\Icons\\INV_Drink_07",
+    conjured = "Interface\\Icons\\INV_Drink_18",
     healing = "Interface\\Icons\\INV_Potion_54", healthstone = "Interface\\Icons\\INV_Stone_04", mana = "Interface\\Icons\\INV_Potion_76",
     potions = "Interface\\Icons\\INV_Potion_41", flasks = "Interface\\Icons\\INV_Potion_62",
     elixirs = "Interface\\Icons\\INV_Potion_32", protection = "Interface\\Icons\\INV_Potion_16",

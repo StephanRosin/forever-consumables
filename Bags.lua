@@ -35,7 +35,12 @@ function Bags.Scan()
                 local cats = ns.Classify.Of(id)
                 if #cats > 0 then
                     local entry = newEntry(id, info)
-                    for _, cat in ipairs(cats) do table.insert(byCat[cat], entry) end
+                    local conjured = entry.conjured and ns.Settings.Get("show_conjured")
+                    for _, cat in ipairs(cats) do
+                        -- Conjured food and water (also both at once) stand once in their own category.
+                        if conjured and (cat == "food" or cat == "drink") then cat = "conjured" end
+                        if byCat[cat][#byCat[cat]] ~= entry then table.insert(byCat[cat], entry) end
+                    end
                 end
             end
         end
