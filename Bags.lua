@@ -28,7 +28,7 @@ end
 function Bags.Scan()
     local byCat, seen = {}, {}
     for _, cat in ipairs(ns.Settings.CATEGORIES) do byCat[cat] = {} end
-    for bag = 0, NUM_BAG_SLOTS or 4 do
+    for bag = 0, NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS or 4 do   -- with the reagent bag
         for slot = 1, C_Container.GetContainerNumSlots(bag) or 0 do
             local info = C_Container.GetContainerItemInfo(bag, slot)
             local id = info and info.itemID
@@ -50,7 +50,7 @@ function Bags.Scan()
     -- The trinket worn in each slot heads its list; the bag ones can replace it.
     for cat, slot in pairs(Bags.TRINKET_SLOTS) do
         local id = GetInventoryItemID("player", slot)
-        if id and C_Item.GetItemSpell(id) then
+        if id then
             local entry = newEntry(id, { iconFileID = GetInventoryItemTexture("player", slot) })
             entry.slot = slot
             table.insert(byCat[cat], 1, entry)

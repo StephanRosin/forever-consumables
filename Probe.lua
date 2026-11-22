@@ -9,7 +9,7 @@ local ADDON, ns = ...
 
 local function bagItems()
     local seen, list = {}, {}
-    for bag = 0, NUM_BAG_SLOTS or 4 do
+    for bag = 0, NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS or 4 do   -- with the reagent bag
         for slot = 1, C_Container.GetContainerNumSlots(bag) or 0 do
             local info = C_Container.GetContainerItemInfo(bag, slot)
             if info and info.itemID and not seen[info.itemID] then
@@ -19,6 +19,11 @@ local function bagItems()
         end
     end
     table.sort(list)
+    -- The worn trinkets too: their slot buttons need the same answers.
+    for _, slot in pairs(ns.Bags.TRINKET_SLOTS) do
+        local id = GetInventoryItemID("player", slot)
+        if id and not seen[id] then seen[id] = true; list[#list + 1] = id end
+    end
     return list
 end
 
@@ -28,7 +33,7 @@ ns.Slash.scan = function()
         local name, _, _, itemLevel, minLevel, _, _, _, _, _, _, classID, subclassID = C_Item.GetItemInfo(id)
         local spell, spellID = C_Item.GetItemSpell(id)
         out[#out + 1] = { id = id, name = name, classID = classID, subclassID = subclassID, spell = spell,
-            spellID = spellID, itemLevel = itemLevel, minLevel = minLevel,
+            spellID = spellID, itemLevel = itemLevel, minLevel = minLevel, equipLoc = select(4, C_Item.GetItemInfoInstant(id)),
             cats = table.concat(ns.Classify.Of(id), ","), buffFood = ns.Classify.IsBuffFood(id) }
     end
     local spells = {}

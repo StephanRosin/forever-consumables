@@ -59,9 +59,9 @@ local function compute(id)
     local spell = C_Item.GetItemSpell(id)
     -- An item the client has not loaded yet reports no spell: water would pass as food.
     local complete = spell ~= nil or not C_Item.IsItemDataCachedByID or C_Item.IsItemDataCachedByID(id)
-    -- Only quest items and trinkets with a use effect: the others have nothing to click.
+    -- Only quest items with a use effect; every trinket, the slot menu also swaps passive ones.
     if classID == QUEST_CLASS then return spell and { "quest" } or {}, complete end
-    if equipLoc == "INVTYPE_TRINKET" then return spell and { "trinket1", "trinket2" } or {}, complete end
+    if equipLoc == "INVTYPE_TRINKET" then return { "trinket1", "trinket2" }, true end
     if classID ~= 0 then return {}, classID ~= nil end
     if spell then
         local n
