@@ -65,6 +65,8 @@ local function newWidget(name, template)
     function w:SetScale(v) guard(self, "SetScale"); self._scale = v end
     function w:GetScale() return self._scale end
     function w:GetEffectiveScale() return self._scale end
+    function w:SetFrameLevel(v) self._level = v end
+    function w:GetFrameLevel() return self._level or 1 end
     function w:SetPoint(p, rel, p2, x, y)
         guard(self, "SetPoint")
         if type(rel) == "number" then x, y, rel, p2 = rel, p2, nil, nil end
