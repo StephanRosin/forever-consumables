@@ -65,4 +65,19 @@ g = Lay.Compute({ count = 0, perRow = 10, size = 30, spacing = 4, orientation = 
 M.check("empty bar", g.barWidth, 0)
 M.check("empty: just the toggle", g.width, 14)
 
+-- Growth mirrored: 3 cells of 30, two per row, horizontal, left and up.
+g = Lay.Compute({ count = 3, perRow = 2, size = 30, spacing = 4, orientation = "HORIZONTAL", arrowMode = "RIGHTCLICK",
+    growX = "LEFT", growY = "UP" })
+M.check("left/up: first cell right, bottom", g.cells[1].x .. "," .. g.cells[1].y, "37,-37")
+M.check("left/up: second cell left of it", g.cells[2].x .. "," .. g.cells[2].y, "3,-37")
+M.check("left/up: next row above", g.cells[3].x .. "," .. g.cells[3].y, "37,-3")
+M.check("left: bar starts at the left edge", g.barX, 0)
+M.check("left/up: toggle at the start corner", g.toggleX .. "," .. g.toggleY, (g.width - 14) .. "," .. -(g.height - 14))
+g = Lay.Compute({ count = 3, perRow = 2, size = 30, spacing = 4, orientation = "VERTICAL", arrowMode = "RIGHTCLICK",
+    growY = "UP" })
+M.check("vertical up: bar at the top, toggle below", g.barY .. "," .. g.toggleY, "0," .. -(g.height - 14))
+M.check("vertical up: first cell at the bottom", g.cells[1].y, -37)
+g = Lay.Compute({ count = 3, perRow = 2, size = 30, spacing = 4, orientation = "HORIZONTAL", arrowMode = "RIGHTCLICK" })
+M.check("default: toggle top left", g.toggleX .. "," .. g.toggleY, "0,0")
+
 M.done()

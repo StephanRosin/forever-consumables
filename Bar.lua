@@ -134,7 +134,6 @@ function Bar.Create()
 
     local toggle = CreateFrame("Button", "ForeverConsumablesToggle", holder, "SecureHandlerClickTemplate")
     toggle:SetSize(ns.Layout.TOGGLE, ns.Layout.TOGGLE)
-    toggle:SetPoint("TOPLEFT", holder, "TOPLEFT", 0, 0)
     toggle.icon = toggle:CreateTexture(nil, "ARTWORK")
     toggle.icon:SetAllPoints(toggle)
     toggle:RegisterForClicks("AnyUp")
@@ -320,7 +319,8 @@ function Bar.Refresh()
 
     local arrowMode = S.Get("arrowMode")
     local g = ns.Layout.Compute({ count = #visible, perRow = S.Get("perRow"), size = S.Get("size"),
-        spacing = S.Get("spacing"), orientation = S.Get("orientation"), arrowMode = arrowMode })
+        spacing = S.Get("spacing"), orientation = S.Get("orientation"), arrowMode = arrowMode,
+        growX = S.Get("growX"), growY = S.Get("growY") })
     local size = S.Get("size")
     local shownCat = {}
     for i, cat in ipairs(visible) do
@@ -372,6 +372,8 @@ function Bar.Refresh()
     bar:SetSize(math.max(1, g.barWidth), math.max(1, g.barHeight))
     bar:ClearAllPoints()
     bar:SetPoint("TOPLEFT", holder, "TOPLEFT", g.barX, g.barY)
+    Bar.toggle:ClearAllPoints()
+    Bar.toggle:SetPoint("TOPLEFT", holder, "TOPLEFT", g.toggleX, g.toggleY)
     Bar.toggle:SetAttribute("hasItems", #visible > 0)
     Bar.toggle:SetAttribute("collapsed", collapsed())
     bar:SetShown(#visible > 0 and not collapsed())

@@ -67,6 +67,8 @@ local function barTab()
         { type = "header", label = "OPT_LAYOUT" },
         select("orientation", "OPT_ORIENTATION", "ORIENT_"),
         slider("perRow", "OPT_PER_ROW"),
+        select("growX", "OPT_GROW_X", "GROW_"),
+        select("growY", "OPT_GROW_Y", "GROW_"),
         slider("size", "OPT_SIZE", "px"),
         slider("spacing", "OPT_SPACING", "px"),
         slider("scale", "OPT_SCALE", "%", 5),

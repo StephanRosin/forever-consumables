@@ -18,6 +18,8 @@ local DEFS = {
     -- The bar
     { key = "orientation", type = "enum", values = { "HORIZONTAL", "VERTICAL" }, default = "HORIZONTAL" },
     { key = "perRow", type = "int", min = 1, max = 10, default = 10 },
+    { key = "growX", type = "enum", values = { "RIGHT", "LEFT" }, default = "RIGHT" },
+    { key = "growY", type = "enum", values = { "DOWN", "UP" }, default = "DOWN" },
     { key = "size", type = "int", min = 20, max = 64, default = 36 },
     { key = "spacing", type = "int", min = 0, max = 20, default = 4 },
     { key = "scale", type = "int", min = 50, max = 200, default = 100 },
