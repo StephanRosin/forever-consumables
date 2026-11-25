@@ -50,6 +50,20 @@ M.check("conjured first", C.Best(scan.drink, 60).id, 8079)
 M.check("buff food never automatic", C.Best(scan.food, 60).id, 4599)
 M.check("only buff food: none", C.Best({ scan.food[2] }, 60), nil)
 
+-- Buff food while not Well Fed; plain food stays the fallback.
+M.check("buff first: buff food", C.Best(scan.food, 60, true).id, 21023)
+M.check("buff first: too high a level", C.Best(scan.food, 50, true).id, 4599)
+M.check("buff first: only plain food", C.Best({ scan.food[1] }, 60, true).id, 4599)
+M.check("buff first: not for a hand choice", C.Resolve(scan.food, 4599, 60, true).id, 4599)
+C_UnitAuras = { GetAuraDataBySpellName = function(unit, name) return unit == "player" and name == M.aura and {} or nil end }
+M.spells[19705] = "Well Fed"
+ns.Classify.Reset()
+M.check("not well fed", ns.Classify.IsWellFed(), false)
+M.aura = "Well Fed"
+M.check("well fed", ns.Classify.IsWellFed(), true)
+M.aura, M.spells[19705], C_UnitAuras = nil, nil, nil
+ns.Classify.Reset()
+
 -- The two options of the automatic choice. 8766 is the lower, unconjured drink.
 ns.Settings.Set("autoWorst", true)
 M.check("worst: lowest level", C.Best(scan.healing, 60).id, 118)

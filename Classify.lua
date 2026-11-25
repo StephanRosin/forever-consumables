@@ -99,6 +99,11 @@ function Classify.IsConjured(id)
     return found
 end
 
+function Classify.IsWellFed()
+    local wellFed = Names().wellFed
+    return wellFed ~= nil and C_UnitAuras.GetAuraDataBySpellName("player", wellFed, "HELPFUL") ~= nil
+end
+
 -- Listed, or its use spell's text names the "Well Fed" buff.
 function Classify.IsBuffFood(id)
     if Items.BUFF_FOOD[id] then return true end

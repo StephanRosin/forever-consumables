@@ -52,6 +52,7 @@ local DEFS = {
     { key = "showKeybind", type = "bool", default = true },
     { key = "autoWorst", type = "bool", default = false },
     { key = "conjuredFirst", type = "bool", default = true },
+    { key = "buffFoodUnfed", type = "bool", default = false },
     -- Categories
     { key = "hideEmpty", type = "bool", default = true },
     { key = "order", type = "text", default = table.concat(Settings.CATEGORIES, ",") },

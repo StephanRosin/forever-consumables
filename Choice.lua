@@ -4,7 +4,8 @@ character) while that item is in the bags, otherwise the best one: usable at
 your level, conjured first, then the higher required level, then the higher
 item level. Two settings change this: "conjuredFirst" off lets conjured items
 compete by level alone, "autoWorst" takes the lowest level instead of the
-highest. Buff food is never chosen automatically.
+highest. Buff food is never chosen automatically, except with "buffFoodUnfed"
+while you lack Well Fed: then it comes first, plain food is the fallback.
 -----------------------------------------------------------------------------]]
 
 local ADDON, ns = ...
@@ -18,27 +19,28 @@ local function higher(a, b)
     return a.id > b.id
 end
 
-function Choice.Best(list, level)
+function Choice.Best(list, level, buffFirst)
     local conjuredFirst, worst = ns.Settings.Get("conjuredFirst"), ns.Settings.Get("autoWorst")
     local function better(a, b)
+        if buffFirst and not a.buffFood ~= not b.buffFood then return a.buffFood end
         if conjuredFirst and a.conjured ~= b.conjured then return a.conjured end
         if worst then return higher(b, a) end
         return higher(a, b)
     end
     local best
     for _, e in ipairs(list) do
-        if not e.buffFood and (e.minLevel or 0) <= level and (not best or better(e, best)) then best = e end
+        if (buffFirst or not e.buffFood) and (e.minLevel or 0) <= level and (not best or better(e, best)) then best = e end
     end
     return best
 end
 
-function Choice.Resolve(list, chosenID, level)
+function Choice.Resolve(list, chosenID, level, buffFirst)
     if chosenID then
         for _, e in ipairs(list) do
             if e.id == chosenID then return e, true end
         end
     end
-    return Choice.Best(list, level), false
+    return Choice.Best(list, level, buffFirst), false
 end
 
 function Choice.Get(cat)

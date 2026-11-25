@@ -41,6 +41,7 @@ local MANA_ONLY = { drink = true, mana = true }   -- hidden for the classes abov
 local buttons = {}      -- cat -> button
 local lastScan = {}     -- cat -> entries
 local dirty = false
+local wellFed = false    -- last Well Fed state seen by Refresh
 -- In combat for display purposes. PLAYER_REGEN_DISABLED fires before
 -- InCombatLockdown() turns true, so alpha and arrows follow this flag;
 -- InCombatLockdown() alone decides whether protected calls are allowed.
@@ -307,6 +308,8 @@ function Bar.Refresh()
     lastScan = ns.Bags.Scan()
     local level = UnitLevel("player") or 1
     local noMana = NO_MANA[select(2, UnitClass("player"))]
+    wellFed = ns.Classify.IsWellFed()
+    local buffFirst = S.Get("buffFoodUnfed") and not wellFed
     local visible = {}
     for _, cat in ipairs(S.Order()) do
         local list = lastScan[cat]
@@ -328,7 +331,7 @@ function Bar.Refresh()
             local first = lastScan[cat][1]
             b.entry = first and first.slot and first or nil
         else
-            b.entry = ns.Choice.Resolve(lastScan[cat], ns.Choice.Get(cat), level)
+            b.entry = ns.Choice.Resolve(lastScan[cat], ns.Choice.Get(cat), level, cat == "food" and buffFirst)
         end
         local e = b.entry
         b:SetAttribute("type", e and e.spell and "spell" or "item")
@@ -408,6 +411,10 @@ ns.On("SPELLS_CHANGED", function()
     Bar.Refresh()
 end)
 ns.On("BAG_UPDATE_DELAYED", Bar.Refresh)
+-- Auras change constantly: rebuild only when Well Fed comes or goes.
+ns.On("UNIT_AURA", function(unit)
+    if unit == "player" and S.Get("buffFoodUnfed") and ns.Classify.IsWellFed() ~= wellFed then Bar.Refresh() end
+end)
 ns.On("PLAYER_LEVEL_UP", function() C_Timer.After(0.5, Bar.Refresh) end)
 ns.On("PLAYER_EQUIPMENT_CHANGED", function() Bar.Refresh() end)
 ns.On("BAG_UPDATE_COOLDOWN", function() Bar.UpdateDisplay() end)

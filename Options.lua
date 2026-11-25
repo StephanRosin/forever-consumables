@@ -123,6 +123,7 @@ local function displayTab()
         check("showKeybind", "OPT_SHOW_KEYBIND"),
         check("autoWorst", "OPT_AUTO_WORST"),
         check("conjuredFirst", "OPT_CONJURED_FIRST"),
+        check("buffFoodUnfed", "OPT_BUFF_FOOD_UNFED"),
     }
 end
 
