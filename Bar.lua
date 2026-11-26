@@ -85,7 +85,8 @@ local function newButton(cat)
     if cat == "weapon" then
         -- Oils and stones ask for a target: the template answers with this slot.
         b:SetAttribute("target-slot", MAIN_HAND_SLOT)
-        b:SetAttribute("shift-target-slot", OFF_HAND_SLOT)
+        -- The client looks up modifier-name-button: without "*" a shift attribute never matches.
+        b:SetAttribute("shift-target-slot*", OFF_HAND_SLOT)
     end
     b.icon = b:CreateTexture(nil, "ARTWORK")
     b.icon:SetAllPoints(b)

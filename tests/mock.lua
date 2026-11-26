@@ -156,6 +156,14 @@ end
 -- a restricted environment that may change protected frames; secure action
 -- buttons "use" their item (recorded in M.used) unless the button's type is
 -- the no-op "". Then PostClick.
+-- SecureButton_GetModifiedAttribute's lookup order (frame:GetAttribute(prefix, name, suffix)).
+function M.Modified(f, name, prefix, suffix)
+    for _, k in ipairs({ prefix .. name .. suffix, "*" .. name .. suffix, prefix .. name .. "*", "*" .. name .. "*", name }) do
+        local v = f:GetAttribute(k)
+        if v ~= nil then return v end
+    end
+end
+
 function M.Click(f, mouse, down)
     mouse = mouse or "LeftButton"
     local snippet = f:GetAttribute("_onclick")
