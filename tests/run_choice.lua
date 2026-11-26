@@ -42,6 +42,13 @@ M.check("known spell in other", scan.other[1] and scan.other[1].name, "Cannibali
 M.check("spell entry flagged", scan.other[1].spell, true)
 M.check("spell chosen automatically", C.Best(scan.other, 30).id, 20577)
 M.known, M.spells[20577], M.items[6948], M.bags[6948] = nil, nil, nil, nil
+-- Ranked spells: the highest known rank, one entry per spell.
+M.known = { [8017] = true, [8018] = true, [8019] = true }
+M.spells[8017], M.spells[8018], M.spells[8019] = "Rockbiter Weapon", "Rockbiter Weapon", "Rockbiter Weapon"
+scan = B.Scan()
+M.check("ranks: one entry", #scan.weapon, 1)
+M.check("ranks: highest known", scan.weapon[1].id, 8019)
+M.known, M.spells[8017], M.spells[8018], M.spells[8019] = nil, nil, nil, nil
 M.check("best: highest usable level", C.Best(scan.healing, 30).id, 929)
 M.level = 60
 scan = B.Scan()

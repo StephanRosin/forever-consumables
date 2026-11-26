@@ -57,8 +57,12 @@ function Bags.Scan()
         end
     end
     for cat, ids in pairs(ns.Items.SPELLS) do
-        for _, id in ipairs(ids) do
-            if C_SpellBook.IsSpellKnown(id) then
+        for _, ranks in ipairs(ids) do
+            local id
+            for _, r in ipairs(type(ranks) == "table" and ranks or { ranks }) do
+                if C_SpellBook.IsSpellKnown(r) then id = r end
+            end
+            if id then
                 table.insert(byCat[cat], { id = id, spell = true, name = C_Spell.GetSpellName(id) or ("spell:" .. id),
                     icon = C_Spell.GetSpellTexture(id), minLevel = 0, itemLevel = 0 })
             end

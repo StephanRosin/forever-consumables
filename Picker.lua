@@ -61,7 +61,7 @@ function Picker.Tooltip(button)
         GameTooltip:SetText(catLabel(button.cat))
     end
     GameTooltip:AddLine(L.TIP_USE, 1, 1, 1)
-    if button.cat == "weapon" then GameTooltip:AddLine(L.TIP_OFF_HAND, 1, 1, 1) end
+    if button.cat == "weapon" and not (button.entry and button.entry.spell) then GameTooltip:AddLine(L.TIP_OFF_HAND, 1, 1, 1) end
     GameTooltip:AddLine(S.Get("arrowMode") == "RIGHTCLICK" and L.TIP_PICK_RIGHT or L.TIP_PICK_ARROW, 1, 1, 1)
     GameTooltip:Show()
 end

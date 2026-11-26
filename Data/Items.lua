@@ -64,14 +64,28 @@ Items.LISTS = {
         20744, 20746, 20750, 20749, 22522, 23123,    -- Wizard oils: Minor .. Brilliant, Superior, Blessed
         20745, 20747, 20748, 22521,                  -- Mana oils: Minor, Lesser, Brilliant, Superior
         3824, 3829,                                  -- Shadow Oil, Frost Oil
+        -- shortcut: poison IDs from memory, not yet checked with /fcon ids.
+        6947, 6949, 6950, 8926, 8927, 8928,          -- Instant Poison I .. VI
+        2892, 2893, 8984, 8985, 20844,               -- Deadly Poison I .. V
+        3775, 3776,                                  -- Crippling Poison I, II
+        5237, 6951, 9186,                            -- Mind-numbing Poison I .. III
+        10918, 10920, 10921, 10922,                  -- Wound Poison I .. IV
     },
     -- shortcut: IDs from memory, not yet checked with /fcon ids; Engineering devices are no consumables.
     other = { 7148, 18587 },                         -- Goblin Jumper Cables, Goblin Jumper Cables XL
 }
 
 -- Spells with a button of their own, shown only when the character knows them.
+-- A table lists the ranks, lowest first: the highest known rank is used.
 Items.SPELLS = {
     other = { 20577 },                              -- Cannibalize (Undead)
+    -- shortcut: rank IDs from memory, not yet checked in game.
+    weapon = {                                      -- Shaman weapon imbues, main hand only
+        { 8017, 8018, 8019, 10399, 16314, 16315, 16316 }, -- Rockbiter Weapon
+        { 8024, 8027, 8030, 16339, 16341, 16342 },  -- Flametongue Weapon
+        { 8033, 8038, 10456, 16355, 16356 },        -- Frostbrand Weapon
+        { 8232, 8235, 10486, 16362 },               -- Windfury Weapon
+    },
 }
 
 -- Conjured items go first: they vanish when you log out long enough.
