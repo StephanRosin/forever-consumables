@@ -58,7 +58,8 @@ local COLLAPSE = [[
     end
 ]]
 
-local function collapsed() return ns.CharDB().collapsed == true end
+-- Without its button the bar could never be opened again: hidden means expanded.
+local function collapsed() return S.Get("showToggle") and ns.CharDB().collapsed == true end
 
 local function paintToggle()
     Bar.toggle.icon:SetTexture(collapsed() and TOGGLE_CLOSED or TOGGLE_OPEN)
@@ -321,7 +322,7 @@ function Bar.Refresh()
     local arrowMode = S.Get("arrowMode")
     local g = ns.Layout.Compute({ count = #visible, perRow = S.Get("perRow"), size = S.Get("size"),
         spacing = S.Get("spacing"), orientation = S.Get("orientation"), arrowMode = arrowMode,
-        growX = S.Get("growX"), growY = S.Get("growY") })
+        growX = S.Get("growX"), growY = S.Get("growY"), toggle = S.Get("showToggle") })
     local size = S.Get("size")
     local shownCat = {}
     for i, cat in ipairs(visible) do
@@ -375,6 +376,7 @@ function Bar.Refresh()
     bar:SetPoint("TOPLEFT", holder, "TOPLEFT", g.barX, g.barY)
     Bar.toggle:ClearAllPoints()
     Bar.toggle:SetPoint("TOPLEFT", holder, "TOPLEFT", g.toggleX, g.toggleY)
+    Bar.toggle:SetShown(S.Get("showToggle"))
     Bar.toggle:SetAttribute("hasItems", #visible > 0)
     Bar.toggle:SetAttribute("collapsed", collapsed())
     bar:SetShown(#visible > 0 and not collapsed())

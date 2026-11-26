@@ -119,6 +119,13 @@ M.setCombat(false)
 M.Click(toggle, "LeftButton")
 M.Fire("BAG_UPDATE_DELAYED")
 M.check("refresh keeps it collapsed", Bar.bar:IsShown(), false)
+S.Set("showToggle", false)
+Bar.Refresh()
+M.check("button hidden", toggle:IsShown(), false)
+M.check("hidden button: bar open anyway", Bar.bar:IsShown(), true)
+S.Set("showToggle", true)
+Bar.Refresh()
+M.check("button back: collapsed again", Bar.bar:IsShown(), false)
 M.Click(toggle, "LeftButton")
 
 -- Visibility driver.

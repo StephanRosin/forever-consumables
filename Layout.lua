@@ -37,18 +37,20 @@ function Layout.Compute(o)
     else
         g.barWidth, g.barHeight = 0, 0
     end
-    local gap = Layout.TOGGLE + o.spacing
+    -- toggle = false: no collapse button, so no room for it.
+    local t = o.toggle == false and 0 or Layout.TOGGLE
+    local gap = t > 0 and t + o.spacing or 0
     local left, up = o.growX == "LEFT", o.growY == "UP"
     if horizontal then
         g.barX, g.barY = left and 0 or gap, 0
-        g.width = o.count > 0 and gap + g.barWidth or Layout.TOGGLE
-        g.height = math.max(Layout.TOGGLE, g.barHeight)
+        g.width = o.count > 0 and gap + g.barWidth or t
+        g.height = math.max(t, g.barHeight)
     else
         g.barX, g.barY = 0, up and 0 or -gap
-        g.width = math.max(Layout.TOGGLE, g.barWidth)
-        g.height = o.count > 0 and gap + g.barHeight or Layout.TOGGLE
+        g.width = math.max(t, g.barWidth)
+        g.height = o.count > 0 and gap + g.barHeight or t
     end
-    g.toggleX = left and g.width - Layout.TOGGLE or 0
-    g.toggleY = up and -(g.height - Layout.TOGGLE) or 0
+    g.toggleX = left and g.width - t or 0
+    g.toggleY = up and -(g.height - t) or 0
     return g
 end

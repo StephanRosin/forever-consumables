@@ -80,4 +80,11 @@ M.check("vertical up: first cell at the bottom", g.cells[1].y, -37)
 g = Lay.Compute({ count = 3, perRow = 2, size = 30, spacing = 4, orientation = "HORIZONTAL", arrowMode = "RIGHTCLICK" })
 M.check("default: toggle top left", g.toggleX .. "," .. g.toggleY, "0,0")
 
+-- No collapse button: no room for it, the bar starts at the edge.
+g = Lay.Compute({ count = 3, perRow = 10, size = 30, spacing = 4, orientation = "HORIZONTAL", arrowMode = "RIGHT", toggle = false })
+M.check("no toggle: bar x", g.barX, 0)
+M.check("no toggle: width is the bar", g.width, g.barWidth)
+g = Lay.Compute({ count = 3, perRow = 1, size = 30, spacing = 4, orientation = "VERTICAL", arrowMode = "RIGHTCLICK", toggle = false })
+M.check("no toggle, vertical: bar y", g.barY, 0)
+
 M.done()

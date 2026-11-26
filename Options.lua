@@ -69,6 +69,7 @@ local function barTab()
         slider("perRow", "OPT_PER_ROW"),
         select("growX", "OPT_GROW_X", "GROW_"),
         select("growY", "OPT_GROW_Y", "GROW_"),
+        check("showToggle", "OPT_SHOW_TOGGLE"),
         slider("size", "OPT_SIZE", "px"),
         slider("spacing", "OPT_SPACING", "px"),
         slider("scale", "OPT_SCALE", "%", 5),

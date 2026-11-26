@@ -32,6 +32,7 @@ local DEFS = {
     { key = "x", type = "int", min = -2000, max = 2000, default = 0 },
     { key = "y", type = "int", min = -2000, max = 2000, default = -200 },
     { key = "locked", type = "bool", default = true },
+    { key = "showToggle", type = "bool", default = true },
     -- Visibility
     { key = "visMode", type = "enum", values = { "ALWAYS", "COMBAT", "NOCOMBAT", "NEVER" }, default = "ALWAYS" },
     { key = "visInstance", type = "bool", default = false },
